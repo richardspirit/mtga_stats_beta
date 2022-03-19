@@ -1,5 +1,11 @@
 import React from 'react';
 import {useTable} from 'react-table';
+import { persistStore } from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react';
+import store from '../app/store';
+import {Provider} from 'react-redux'
+
+let persistor = persistStore(store);
 
 export default function ResultQuery({columns, data}){
     //build table from useTable hook props
@@ -14,7 +20,9 @@ export default function ResultQuery({columns, data}){
         data
     });
     return (
-        <table {...getTableProps()}>
+        <Provider store={store}>
+            <PersistGate persistor={persistor}>
+        <table {...getTableProps()} id='deckData'>
             <thead>
                 {headerGroups.map((headerGroup) => (
                     <tr {...headerGroup.getHeaderGroupProps()}>
@@ -37,5 +45,7 @@ export default function ResultQuery({columns, data}){
                 })}
             </tbody>
         </table>
+        </PersistGate>
+        </Provider>
     );
 }

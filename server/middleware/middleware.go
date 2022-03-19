@@ -56,10 +56,25 @@ func WinPerc(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(payload)
 }
 
+func DeckName(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Context-Type", "application/x-www-form-urlencoded")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	payload := deckName()
+	json.NewEncoder(w).Encode(payload)
+}
+
 func Favorites(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Context-Type", "application/x-www-form-urlencoded")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	payload := favorites()
+	json.NewEncoder(w).Encode(payload)
+}
+
+func DeckDetails(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Context-Type", "application/x-www-form-urlencoded")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	//deck := mux.Vars(r)["deck"]
+	payload := deckDetails()
 	json.NewEncoder(w).Encode(payload)
 }
 
@@ -286,4 +301,94 @@ func favorites() []string {
 		finalresult = append(finalresult, finalrecord)
 	}
 	return finalresult
+}
+
+func deckName() []string {
+	//open database
+	db := opendb()
+	defer db.Close()
+
+	var deckname string
+
+	results, err := db.Query("SELECT name FROM mtga.decks")
+	if err != nil {
+		panic(err.Error())
+	}
+	var finalresult []string
+	for results.Next() {
+		err = results.Scan(&deckname)
+		if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+		}
+		finalresult = append(finalresult, deckname)
+	}
+	return finalresult
+}
+
+func deckDetails() []string {
+	// Open up our database connection.
+	db := opendb()
+	defer db.Close()
+
+	var (
+		vquery string
+		/* 			vquery_all string
+		   			order_col  string */
+	)
+
+	var d models.Deck
+	//DeckName = strings.TrimSuffix(strings.TrimSuffix(DeckName, "\r"), "\n")
+	//vquery = "SELECT name, colors, date_entered, favorite, max_streak, cur_streak, numcards, numlands, numspells, numcreatures, numenchant, numartifacts FROM mtga.decks WHERE name=?"
+	//results := db.QueryRow(vquery, DeckName)
+	vquery = "SELECT name, colors, date_entered, favorite, max_streak, cur_streak, numcards, numlands, numspells, numcreatures, numenchant, numartifacts FROM mtga.decks"
+	results, err := db.Query(vquery)
+	if err != nil {
+		panic(err.Error())
+	}
+	var finalresults []string
+	for results.Next() {
+		err = results.Scan(&d.Name, &d.Colors, &d.Date_Entered, &d.Favorite, &d.Max_Streak, &d.Cur_Streak,
+			&d.Num_Cards, &d.Num_Lands, &d.Num_Spells, &d.Num_Creat, &d.Num_Enchant, &d.Num_Art)
+		if err != nil {
+			panic(err.Error())
+		}
+		ffav := d.Favorite
+		var sfav string
+		if ffav == 0 {
+			sfav = "Yes"
+		} else {
+			sfav = "No"
+		}
+		finalrecord := fmt.Sprint(d.Name + "|" + strconv.Itoa(d.Num_Cards) + "|" + strconv.Itoa(d.Num_Creat) + "|" + strconv.Itoa(d.Max_Streak) + "|" + d.Colors + "|" + strconv.Itoa(d.Num_Lands) + "|" + strconv.Itoa(d.Num_Enchant) + "|" + strconv.Itoa(d.Cur_Streak) + "|" + d.Date_Entered.Format("01-02-2006") + "|" + strconv.Itoa(d.Num_Spells) + "|" + strconv.Itoa(d.Num_Art) + "|" + sfav)
+		finalresults = append(finalresults, finalrecord)
+	}
+
+	//m := make(map[string]string)
+	// Set key/value pairs using typical `name[key] = val`
+	/* 			m["k1"] = fmt.Sprintf("%-30s", d.Name)
+	   			m["k2"] = fmt.Sprintf("%-20s", d.Colors)
+	   			m["k3"] = fmt.Sprintf("%-25s", d.Date_Entered.Format("01-02-2006"))
+	   			m["k4"] = fmt.Sprintf("%-15s", strconv.Itoa(d.Favorite))
+	   			m["k5"] = fmt.Sprintf("%-24s", strconv.Itoa(d.Max_Streak))
+	   			m["k6"] = fmt.Sprintf("%-11s", strconv.Itoa(d.Cur_Streak))
+	   			m["k7"] = fmt.Sprintf("%-23s", strconv.Itoa(d.Num_Cards))
+	   			m["k8"] = fmt.Sprintf("%-14s", strconv.Itoa(d.Num_Lands))
+	   			m["k9"] = fmt.Sprintf("%-35s", strconv.Itoa(d.Num_Spells))
+	   			m["k10"] = fmt.Sprintf("%-7s", strconv.Itoa(d.Num_Enchant))
+	   			m["k11"] = fmt.Sprintf("%-23s", strconv.Itoa(d.Num_Art))
+	   			m["k12"] = fmt.Sprintf("%-19s", strconv.Itoa(d.Num_Creat)) */
+	// print deck details
+	/* 			fmt.Println("Name:", m["k1"]+"Color:", m["k2"]+"Date Entered:", m["k3"]+"Favorite:", sfav)
+	   			fmt.Println("Total Cards:", m["k7"]+"Total Lands:", m["k8"]+"Total Instant/Sorcery:", m["k9"])
+	   			fmt.Println("Total Creatures:", m["k12"]+"Total Enchantments:", m["k10"]+"Total Artifacts:", m["k11"])
+	   			fmt.Println("Max Streak:", m["k5"]+"Current Streak:", m["k6"])
+	   			ret = d.Name */
+	//format strings to be more readable
+	//deck.Name = fmt.Sprintf("%s", deck.Name)
+	//deck.Colors = fmt.Sprintf("%s", deck.Colors)
+	//fdate := fmt.Sprintf("%s", deck.Date_Entered.Format("2006-01-02"))
+	//fmstreak := fmt.Sprintf("%s", strconv.Itoa(mstreak))
+	//finalrecord := fmt.Sprintf(d.Name + "|" + strconv.Itoa(d.Num_Cards) + "|" + strconv.Itoa(d.Num_Creat) + "|" + strconv.Itoa(d.Max_Streak) + "|" + d.Colors + "|" + "|" + strconv.Itoa(d.Num_Lands) + "|" + strconv.Itoa(d.Num_Enchant) + "|" + strconv.Itoa(d.Cur_Streak) + "|" + d.Date_Entered.Format("01-02-2006") + "|" + strconv.Itoa(d.Num_Spells) + "|" + strconv.Itoa(d.Num_Art) + "|" sfav)
+	//log.Println(finalrecord)
+	return finalresults
 }
