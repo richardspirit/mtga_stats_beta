@@ -65,12 +65,7 @@ export default function DeckDetail() {
     let url = endpoint + `/api/deckdetails`;
     const data = [];
     let deckData = [];
-    const [DeckData, setDeckData] = useState([]);
-
-    const dataDeck = () => {
-        deckData.push(data[0]);
-        //console.log(deckData)
-    };
+    const [DeckData, setDeckData] = useState(deckData);
 
     const getData = () => {
         fetch(url).then((res) => res.json())
@@ -102,9 +97,6 @@ export default function DeckDetail() {
         data.push(rowObj);
         count++;
 
-        if (count === Array.length){
-            dataDeck();
-        }
     });
     
     const [Decks, getDecks] = React.useState([]);

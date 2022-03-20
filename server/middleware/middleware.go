@@ -1,12 +1,15 @@
 package middleware
 
 import (
+	"context"
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"server/models"
 	"strconv"
+	"strings"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -73,9 +76,17 @@ func Favorites(w http.ResponseWriter, r *http.Request) {
 func DeckDetails(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Context-Type", "application/x-www-form-urlencoded")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	//deck := mux.Vars(r)["deck"]
 	payload := deckDetails()
 	json.NewEncoder(w).Encode(payload)
+}
+
+func NewDeck(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Context-Type", "application/x-www-form-urlencoded")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	var d models.Deck
+	_ = json.NewDecoder(r.Body).Decode(&d)
+	error := newDeck(d)
+	json.NewEncoder(w).Encode(error)
 }
 
 func drank() []string {
@@ -391,4 +402,38 @@ func deckDetails() []string {
 	//finalrecord := fmt.Sprintf(d.Name + "|" + strconv.Itoa(d.Num_Cards) + "|" + strconv.Itoa(d.Num_Creat) + "|" + strconv.Itoa(d.Max_Streak) + "|" + d.Colors + "|" + "|" + strconv.Itoa(d.Num_Lands) + "|" + strconv.Itoa(d.Num_Enchant) + "|" + strconv.Itoa(d.Cur_Streak) + "|" + d.Date_Entered.Format("01-02-2006") + "|" + strconv.Itoa(d.Num_Spells) + "|" + strconv.Itoa(d.Num_Art) + "|" sfav)
 	//log.Println(finalrecord)
 	return finalresults
+}
+
+func newDeck(d models.Deck) error {
+
+	// Open up our database connection.
+	db := opendb()
+	// defer the close till after the main function has finished
+	// executing
+	defer db.Close()
+	d.Name = strings.TrimSpace(d.Name)
+	// perform a db.Query insert
+	query := "INSERT INTO mtga.decks(name, colors, favorite, numcards, numlands, numspells, numcreatures, numenchant, numartifacts) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+	ctx, cancelfunc := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancelfunc()
+	stmt, err := db.PrepareContext(ctx, query)
+	if err != nil {
+		log.Printf("Error %s when preparing SQL statement", err)
+		panic(err.Error())
+	}
+	defer stmt.Close()
+	res, err := stmt.ExecContext(ctx, d.Name, d.Colors, d.Favorite, d.Num_Cards, d.Num_Lands, d.Num_Spells, d.Num_Creat, d.Num_Enchant, d.Num_Art)
+	if err != nil {
+		log.Printf("Error %s when inserting row into deck table", err)
+		panic(err.Error())
+	}
+	rows, err := res.RowsAffected()
+	if err != nil {
+		log.Printf("Error %s when finding rows affected", err)
+		panic(err.Error())
+	}
+	log.Printf("%d deck created ", rows)
+	//fmt.Println("")
+	//menu()
+	return nil
 }
