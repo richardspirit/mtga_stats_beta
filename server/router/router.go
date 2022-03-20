@@ -19,5 +19,6 @@ func Router() *mux.Router {
 	router.HandleFunc("/api/deckname", middleware.DeckName).Methods("GET", "OPTIONS")
 	router.HandleFunc("/api/deckdetails", middleware.DeckDetails).Methods("GET", "OPTIONS")
 	router.HandleFunc("/api/newdeck", middleware.NewDeck).Methods("POST", "OPTIONS")
+	router.HandleFunc("/api/newgame", middleware.NewGame).Methods("POST", "OPTIONS")
 	return router
 }

@@ -17,3 +17,14 @@ type Deck struct {
 	Num_Art      int       `json:"num_art"`
 	Disable      int       `json:"disable"`
 }
+
+type Game struct {
+	Results       int    `json:"results"`
+	Cause         string `json:"cause"`
+	Deck          string `json:"deck"`
+	Opponent      string `json:"opponent"`
+	Level         string `json:"level"`
+	CurrentStreak int    `json:"cur_streak"`
+	MaxStreak     int    `json:"max_streak"`
+	GameType      string `json:"gametype"`
+}

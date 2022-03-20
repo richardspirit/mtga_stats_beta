@@ -2,11 +2,11 @@ package middleware
 
 import (
 	"context"
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"server/components/processing"
 	"server/models"
 	"strconv"
 	"strings"
@@ -14,15 +14,6 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 )
-
-func opendb() *sql.DB {
-	db, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/mtga?parseTime=true")
-	// if there is an error opening the connection, handle it
-	if err != nil {
-		panic(err.Error())
-	}
-	return db
-}
 
 func Drank(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Context-Type", "application/x-www-form-urlencoded")
@@ -89,9 +80,18 @@ func NewDeck(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(error)
 }
 
+func NewGame(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Context-Type", "application/x-www-urlencoded")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	var g models.Game
+	_ = json.NewDecoder(r.Body).Decode(&g)
+	error := newGame(g)
+	json.NewEncoder(w).Encode(error)
+}
+
 func drank() []string {
 	// Open up our database connection.
-	db := opendb()
+	db := processing.Opendb()
 	// defer the close till after the main function has finished
 	// executing
 	defer db.Close()
@@ -131,7 +131,7 @@ func drank() []string {
 }
 
 func gameCount() []string {
-	db := opendb()
+	db := processing.Opendb()
 	// executing
 	defer db.Close()
 
@@ -162,7 +162,7 @@ func gameCount() []string {
 
 func viewDecks() []string {
 	// Open up our database connection.
-	db := opendb()
+	db := processing.Opendb()
 	defer db.Close()
 
 	vquery_all := "SELECT name, colors, date_entered, favorite, max_streak FROM mtga.decks ORDER BY name"
@@ -204,7 +204,7 @@ func viewDecks() []string {
 
 func topTen() []string {
 	// Open up our database connection.
-	db := opendb()
+	db := processing.Opendb()
 	defer db.Close()
 
 	results, err := db.Query("SELECT deck, ranking, wins, loses FROM mtga.topten")
@@ -242,7 +242,7 @@ func topTen() []string {
 
 func winPerc() []string {
 	// Open up our database connection.
-	db := opendb()
+	db := processing.Opendb()
 	defer db.Close()
 	var (
 		deckname string
@@ -280,7 +280,7 @@ func winPerc() []string {
 
 func favorites() []string {
 	// Open up our database connection.
-	db := opendb()
+	db := processing.Opendb()
 	// defer the close till after the main function has finished
 	// executing
 	defer db.Close()
@@ -316,7 +316,7 @@ func favorites() []string {
 
 func deckName() []string {
 	//open database
-	db := opendb()
+	db := processing.Opendb()
 	defer db.Close()
 
 	var deckname string
@@ -338,7 +338,7 @@ func deckName() []string {
 
 func deckDetails() []string {
 	// Open up our database connection.
-	db := opendb()
+	db := processing.Opendb()
 	defer db.Close()
 
 	var (
@@ -407,7 +407,7 @@ func deckDetails() []string {
 func newDeck(d models.Deck) error {
 
 	// Open up our database connection.
-	db := opendb()
+	db := processing.Opendb()
 	// defer the close till after the main function has finished
 	// executing
 	defer db.Close()
@@ -433,6 +433,42 @@ func newDeck(d models.Deck) error {
 		panic(err.Error())
 	}
 	log.Printf("%d deck created ", rows)
+	//fmt.Println("")
+	//menu()
+	return nil
+}
+
+func newGame(g models.Game) error {
+
+	// Open up our database connection.
+	db := processing.Opendb()
+	// defer the close till after the main function has finished
+	// executing
+	defer db.Close()
+
+	// perform a db.Query insert
+	query := "INSERT INTO mtga.games(results, cause, deck, opponent, level, game_type) VALUES (?,?,?,?,?,?)"
+	ctx, cancelfunc := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancelfunc()
+	stmt, err := db.PrepareContext(ctx, query)
+	if err != nil {
+		log.Printf("Error %s when preparing SQL statement", err)
+		panic(err.Error())
+	}
+	defer stmt.Close()
+	res, err := stmt.ExecContext(ctx, g.Results, g.Cause, g.Deck, g.Opponent, g.Level, g.GameType)
+	if err != nil {
+		log.Printf("Error %s when inserting row into deck table", err)
+		panic(err.Error())
+	}
+	rows, err := res.RowsAffected()
+	if err != nil {
+		log.Printf("Error %s when finding rows affected", err)
+		panic(err.Error())
+	}
+	log.Printf("%d row added ", rows)
+	//determin max and current streak
+	processing.Streaks(g.Deck)
 	//fmt.Println("")
 	//menu()
 	return nil

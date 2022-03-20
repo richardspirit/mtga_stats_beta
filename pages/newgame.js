@@ -1,14 +1,144 @@
 import Link from "next/link";
-import Image from "next/image";
-import Head from "next/head";
 import styles from '../styles/Home.module.css';
-import React from 'react';
+import Select from 'react-select';
+import React, {useState, useEffect} from 'react';
 // import Layout from "../components/layout";
+let endpoint = "http://localhost:8080";
 
 export default function NewGame() {
-    const [value, setValue] = React.useState('gametype');
-    const handleChange = (e) => {
-        setValue(e.target.value);
+    const url = endpoint + "/api/newgame";
+    const gameTypes = [{
+        label: "Play",
+        value: "Play"
+    },{
+        label: "Brawl",
+        value: "Brawl"
+    },{
+        label: "Standard Ranked",
+        value: "Standard Ranked"
+    },{
+        label: "Traditional Standard Play",
+        value: "Traditional Standard Play"
+    },{
+        label: "Traditional Standard Ranked",
+        value: "Traditional Standard Ranked"
+    },{
+        label: "Historic Ranked",
+        value: "Historic Ranked"
+    },{
+        label: "Traditional Historic Ranked",
+        value: "Traditional Historic Ranked"
+    },{
+        label: "Historic Brawl",
+        value: "Historic Brawl"
+    },{
+        label: "Bot",
+        value: "Bot"
+    },{
+        label: "Event",
+        value: "Event"
+    }];
+    const [gameType, setGameType] = useState(null);
+
+    const gameLevels = [{
+        label: "Bronze",
+        value: "Bronze"
+    },{
+        label: "Silver",
+        value: "Silver"
+    },{
+        label: "Gold",
+        value: "Silver"
+    },{
+        label: "Platinum",
+        value: "Platinum"
+    },{
+        label: "Diamond",
+        value: "Diamond"
+    },{
+        label: "Mythic",
+        value: "Mythic"
+    }];
+    const [gameLevel, setGameLevel] = useState(null);
+
+    const results = [{label: "Win", value: "Win"}, {label: "Lose", value: "Lose"}]
+    const [gameResults, setGameResults] = useState(null);
+
+    const [deck, setDeck] = useState(null);
+
+    const [Decks, getDecks] = React.useState([]);
+    const urld = endpoint + "/api/deckname";
+    const deckname = []
+    const getName = () => {
+        fetch(urld).then((res) => res.json())
+        .then((res) => {
+            getDecks(res);
+        })
+    };
+
+    useEffect(() => {
+        getName()
+    },[]);
+
+    Decks.forEach(deck => {
+        let rowObj = {};
+        rowObj.label = deck;
+        rowObj.value = deck;
+        deckname.push(rowObj);
+    });
+    
+    const handleChange = (obj) => {
+        if (obj.value === "Win" || obj.value === "Lose"){
+            setGameResults(obj);
+            //console.log(obj);
+        } else if (gameTypes.find(element => element.label === obj.label)) {
+            setGameType(obj);
+            //console.log(obj)
+        } else if (gameLevels.find(element => element.label === obj.label)) {
+            setGameLevel(obj);
+        } else if (deckname.find(element => element.label === obj.label)) {
+            setDeck(obj);
+        }
+     }
+
+     const newGame = async event => {
+        event.preventDefault();
+
+        let result
+        if (gameResults.value === "Win"){
+            result = 0;
+        } else {
+            result = 1;
+        }
+
+        const res  = await fetch(url, {
+            body: JSON.stringify({
+                results: result,
+                deck: deck.value,
+                opponent: event.target.oppname.value,
+                level: gameLevel.value + "-" + event.target.tier.value,
+                gametype: gameType.value,
+                cause: event.target.reason.value
+            }),
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            method: "POST"
+            })
+            .catch(err => {
+                if (err){
+                    alert(err)
+                }
+                //console.log(err)
+            })
+            
+            setGameResults("");
+            setDeck(null);
+            event.target.oppname.value = "";
+            setGameLevel(null);
+            setGameType(null);
+            event.target.reason.value = "";
+            event.target.tier.value = "";
     }
 
     return (
@@ -17,17 +147,24 @@ export default function NewGame() {
             <div>
                 <h1 className={styles.title}>Record New Game</h1>
             </div>
-            <form>
+            <form onSubmit={newGame}>
                 <div className={styles.grid}>
-
                     <label htmlFor="results">
-                        <span>Results(win/lose) </span>
-                        <input id="results" type="text" required />
+                        Results: 
+                        <Select
+                            onChange={handleChange}
+                            defaultValue={gameResults}
+                            options={results}
+                        />
                     </label>
                     
                     <label htmlFor="deckname" >
                         <span>Deck Name </span>
-                        <input id="deckname" type="text" />
+                        <Select
+                            defaultValue={deck}
+                            onChange={handleChange}
+                            options={deckname}
+                        />
                     </label>
                     
                     <label htmlFor="oppname">
@@ -36,34 +173,33 @@ export default function NewGame() {
                     </label>
 
                     <label htmlFor="gamelvl">
-                        <span>Game Level </span>
-                        <input id="gamelvl" type="text" />
+                        Game Level: 
+                        <Select
+                            onChange={handleChange}
+                            defaultValue={gameLevel}
+                            options={gameLevels}
+                        />
                     </label>
 
                     <label htmlFor="tier">
                         <span>Tier: </span>
-                        <input id="tier" type="text" />
+                        <input id="tier" type="number" min="1" max="4" />
                     </label>
 
                     <label>
                         Game Type:
-                        <select value={value} onChange={handleChange}>
-                            <option value="play">Play</option>
-                            <option value="brawl">Brawl</option>
-                            <option value="stanranked">Standard Ranked</option>
-                            <option value="trstplay">Traditional Standard Play</option>
-                            <option value="trstranked">Traditional Standard Ranked</option>
-                            <option value="hisranked">Historic Ranked</option>
-                            <option value="trhisranked">Traditional Historic Ranked</option>
-                            <option value="hisbrawl">Historic Brawl</option>
-                            <option value="bot">Bot</option>
-                        </select>
+                        <Select
+                            onChange={handleChange}
+                            defaultValue={gameType}
+                            options={gameTypes}
+                        />
                     </label>
 
                     <label htmlFor="reason">
                         <span>Reason: </span>
                         <textarea id="reason" required />
                     </label>
+                    <button type="submit">Submit</button>
                 </div>
             </form>
             <Link href="/">
