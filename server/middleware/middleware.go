@@ -89,6 +89,15 @@ func NewGame(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(error)
 }
 
+func GameByDay(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Context-Type", "application/x-www-form-urlencoded")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	var anal models.Anal
+	_ = json.NewDecoder(r.Body).Decode(&anal)
+	payload := gameByDay(anal.Deck, anal.Winsloses)
+	json.NewEncoder(w).Encode(payload)
+}
+
 func drank() []string {
 	// Open up our database connection.
 	db := processing.Opendb()
@@ -472,4 +481,87 @@ func newGame(g models.Game) error {
 	//fmt.Println("")
 	//menu()
 	return nil
+}
+
+func gameByDay(d string, win_lose string) []string {
+	// Open up our database connection.
+	db := processing.Opendb()
+	// defer the close till after the main function has finished
+	// executing
+	defer db.Close()
+
+	var (
+		deckname           string
+		max_win            int
+		max_lose           int
+		day                string
+		win_day_query      string
+		win_day_all_query  string
+		lose_day_query     string
+		lose_day_all_query string
+		finalresults       []string
+	)
+	println("Deck" + d + win_lose + "test")
+	win_day_query = "SELECT deck, MAX(win_count) as max_win, day_of_week FROM mtga.wins_by_day WHERE deck=? AND deck IN (SELECT name FROM mtga.decks) GROUP BY deck, day_of_week ORDER BY win_count DESC LIMIT 1"
+	win_day_all_query = "SELECT deck, win_count, day_of_week FROM mtga.most_wbd WHERE deck IN (SELECT name FROM mtga.decks) ORDER BY FIELD(day_of_week , 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'), win_count DESC;"
+	lose_day_query = "SELECT deck, MAX(lose_count) as max_loses, day_of_week FROM mtga.loses_by_day WHERE deck=? AND deck IN (SELECT name FROM mtga.decks) GROUP BY deck, day_of_week ORDER BY lose_count DESC LIMIT 1"
+	lose_day_all_query = "SELECT deck, lose_count, day_of_week FROM mtga.most_lbd WHERE deck IN (SELECT name FROM mtga.decks) ORDER BY FIELD(day_of_week , 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'), lose_count DESC"
+
+	if d != "n" && win_lose == "win" {
+		results := db.QueryRow(win_day_query, d)
+		err := results.Scan(&deckname, &max_win, &day)
+		if err != nil {
+			if strings.Contains(err.Error(), "no rows in result set") {
+				fmt.Println("No Games Recored for this Deck")
+			} else {
+				panic(err.Error())
+			}
+		}
+		finalstring := fmt.Sprint(deckname + "|" + day + "|" + strconv.Itoa(max_win))
+		finalresults = append(finalresults, finalstring)
+	} else if d == "n" && win_lose == "win" {
+		println("Deck" + d + win_lose + "test")
+		results, err := db.Query(win_day_all_query)
+		if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+		}
+
+		for results.Next() {
+			// for each row, scan the result into our deck composite object
+			err = results.Scan(&deckname, &max_win, &day)
+			if err != nil {
+				panic(err.Error()) // proper error handling instead of panic in your app
+			}
+			finalstring := fmt.Sprint(deckname + "|" + day + "|" + strconv.Itoa(max_win))
+			finalresults = append(finalresults, finalstring)
+			println("Final String: " + finalstring)
+		}
+	} else if d != "n" && win_lose == "lose" {
+		results := db.QueryRow(lose_day_query, d)
+		err := results.Scan(&deckname, &max_lose, &day)
+		if err != nil {
+			if strings.Contains(err.Error(), "no rows in result set") {
+				fmt.Println("No Games Recored for this Deck")
+			} else {
+				panic(err.Error())
+			}
+		}
+		finalstring := fmt.Sprint(deckname + "|" + day + "|" + strconv.Itoa(max_lose))
+		finalresults = append(finalresults, finalstring)
+	} else if d == "n" && win_lose == "lose" {
+		results, err := db.Query(lose_day_all_query)
+		if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+		}
+		for results.Next() {
+			// for each row, scan the result into our deck composite object
+			err = results.Scan(&deckname, &max_lose, &day)
+			if err != nil {
+				panic(err.Error()) // proper error handling instead of panic in your app
+			}
+			finalstring := fmt.Sprint(deckname + "|" + day + "|" + strconv.Itoa(max_lose))
+			finalresults = append(finalresults, finalstring)
+		}
+	}
+	return finalresults
 }

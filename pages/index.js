@@ -73,7 +73,7 @@ export default function Home() {
           </a>
 
           <a
-            href=''
+            href='reports/analysis'
             className={styles.card}
           >
             <h2>Analysis</h2>
