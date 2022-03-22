@@ -86,6 +86,7 @@ export default function Games() {
         rowObj.winsloses = rowData[2];     
         data.push(rowObj);
         count++;
+        //console.log(rowObj)
     });
     
     const [Decks, getDecks] = React.useState([]);
@@ -134,26 +135,16 @@ export default function Games() {
         let analData = []
         if (obj.value === "All"){
             setDeckOption("n")
-            //getData()
-            //setAnalData(data)            
-            //console.log(gameOption)
-        } else {
-            setDeckOption(obj.label)
-            analData.push(data.find(element => element.deck === obj.label))
-            setAnalData(analData)
-            console.log(analData)
-            console.log(AnalData)
             getData()
-            
-            //analData.shift();
-            //analData.push(data.find(element => element.deck === obj.label))  
-            //console.log(analData)          
-            //setAnalData(analData)            
-            //console.log(gameOption)
+            setAnalData(data)            
+            console.log(deckOption)
+        } else {
+            setDeckOption(obj.value)
+            analData.shift();
+            analData.push(data.find(element => element.deck === obj.value))
+            setAnalData(analData)
         }
-        //getData();
-        //console.log(AnalData)
-        //setAnalData(data);
+
      }
 
     
@@ -174,7 +165,7 @@ export default function Games() {
                     onChange={handleGameChange}
                     options={gameOptions} />
             </div>
-            <ResultQuery columns={columns} data={data}/>
+            <ResultQuery columns={columns} data={AnalData}/>
             <Link href="/">
                 <a>Back Home</a>
             </Link>
