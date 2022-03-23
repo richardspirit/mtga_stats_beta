@@ -31,40 +31,21 @@ export default function Games() {
         },{
             label: "Worst Day",
             value: "Worst Day"
-        },{
-            label: "Monday",
-            value: "Monday"
-        },{
-            label: "Tuesday",
-            value: "Tuesday"
-        },{
-            label: "Wednesday",
-            value: "Wednesday"
-        },{
-            label: "Thursday",
-            value: "Thursday"
-        },{
-            label: "Friday",
-            value: "Friday"
-        },{
-            label: "Saturday",
-            value: "Saturday"
-        },{
-            label: "Sunday",
-            value: "Sunday"
         }]
     //console.log(gameOptions)
+    const [deckOption, setDeckOption] = useState("n");
+    const [gameOption, setGameOption] = useState("win");
 
     const [Row, getRow] = useState([]);
     let url = endpoint + `/api/anal/gamesbyday`;
     const data = [];
     const [AnalData, setAnalData] = useState([]);
 
-    const getData = async () => {
+    const getWinData = async () => {
       await fetch(url,{
             body: JSON.stringify({
                 deck: deckOption,
-                winsloses: gameOption
+                winsloses: "win"
             }),
             method: "POST"
         }).then((res) => res.json())
@@ -74,7 +55,7 @@ export default function Games() {
     };
 
     useEffect(() => {
-        getData()
+        getWinData()
     },[]);
 
     let count = 0;
@@ -88,9 +69,40 @@ export default function Games() {
         count++;
         //console.log(rowObj)
     });
+
+    const [RowLose, getRowLose] = useState([]);
+    const dataLose = [];
+
+    const getLoseData = async () => {
+        await fetch(url,{
+            body: JSON.stringify({
+                deck: deckOption,
+                winsloses: "lose"
+            }),
+            method: "POST"
+        }).then((res) => res.json())
+            .then((res) => {
+                getRowLose(res);
+            })
+    };
+
+    useEffect(() => {
+        getLoseData()
+    },[]);
+    let countLose = 0;
+    RowLose.forEach(element => {
+        const rowData = element.split("|");
+        const rowObj = {};
+        rowObj.deck = rowData[0];
+        rowObj.day = rowData[1];
+        rowObj.winsloses = rowData[2];
+        dataLose.push(rowObj);
+        countLose++;
+    })
     
     const [Decks, getDecks] = React.useState([]);
     const urld = endpoint + "/api/deckname";
+    //add all option to deckname selector
     const deckname = [{
         label: "All",
         value: "All"
@@ -113,41 +125,58 @@ export default function Games() {
         deckname.push(rowObj);
     });
 
-    const [deckOption, setDeckOption] = useState("n");
-    const [gameOption, setGameOption] = useState("win");
+     const [selectedOption, setSelectedOption] = useState(null);
 
-     const handleGameChange = (obj) => {
-        //console.log(obj)
-        if (obj.value === "Best Day"){
+     const handleChange = (obj) => {
+         setSelectedOption(obj);
+         let analData = [];
+         let allDecks
+        console.log(obj)
+        console.log(gameOption)
+        console.log(deckOption)
+        console.log("Test Options")
+         if (obj.value === "Best Day"){
+             setGameOption("win");
+         } else if (obj.value === "Worst Day"){
+             setGameOption("lose")
+         }
+
+         if ((obj.value === "All" && gameOption === "win") || (obj.value === "Best Day" && deckOption === "n")){
+            allDecks = "n";
+            setGameOption("win");
+            setDeckOption(allDecks);
+            setAnalData(data);
+         } else if ((obj.value === "All" && gameOption === "lose") || (obj.value === "Worst Day" && deckOption === "n")){
+            allDecks = "n";
+            setGameOption("lose");
+            setDeckOption(allDecks);
+            setAnalData(dataLose);
+         } else if ((obj.value !== "All" && gameOption === "win") || (obj.value === "Best Day" && deckOption !== "n")){
+            if (obj.value !== "Best Day" && obj.value !== "Worst Day"){
+                setDeckOption(obj.value);
+                analData.shift();
+                analData.push(data.find(element => element.deck === obj.value));
+            } else {
+                analData.shift();
+                analData.push(data.find(element => element.deck === deckOption));
+            }
             setGameOption("win")
-            getData()
-            setAnalData(data)
-            //console.log(deckOption)
-        } else if (obj.value === "Worst Day") {
+            setAnalData(analData);
+         } else if ((obj.value !== "All" && gameOption === "lose")|| (obj.value === "Worst Day" && deckOption !== "n")){
+            if (obj.value !== "Worst Day" && gameOption !== "Best Day"){
+                setDeckOption(obj.value);
+                analData.shift();
+                analData.push(dataLose.find(element => element.deck === obj.value));
+            } else {
+                analData.shift();
+                analData.push(dataLose.find(element => element.deck === deckOption));
+            }
+            console.log("test")
+            console.log(dataLose)
             setGameOption("lose")
-            getData()
-            setAnalData(data)            
-            //console.log(deckOption)
-        } 
+            setAnalData(analData);
+         }
      }
-
-     const handDeckChange = (obj) => {
-        let analData = []
-        if (obj.value === "All"){
-            setDeckOption("n")
-            getData()
-            setAnalData(data)            
-            console.log(deckOption)
-        } else {
-            setDeckOption(obj.value)
-            analData.shift();
-            analData.push(data.find(element => element.deck === obj.value))
-            setAnalData(analData)
-        }
-
-     }
-
-    
 
     return (
         <>
@@ -157,12 +186,12 @@ export default function Games() {
             </div>
             <div>
                 <Select
-                    defaultValue={deckOption}
-                    onChange={handDeckChange}
+                    defaultValue={selectedOption}
+                    onChange={handleChange}
                     options={deckname} />
                 <Select
-                    defaultValue={gameOption}
-                    onChange={handleGameChange}
+                    defaultValue={selectedOption}
+                    onChange={handleChange}
                     options={gameOptions} />
             </div>
             <ResultQuery columns={columns} data={AnalData}/>
