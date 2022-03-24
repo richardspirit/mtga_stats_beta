@@ -520,7 +520,7 @@ func gameByDay(d string, win_lose string) []string {
 		finalstring := fmt.Sprint(deckname + "|" + day + "|" + strconv.Itoa(max_win))
 		finalresults = append(finalresults, finalstring)
 	} else if d == "n" && win_lose == "win" {
-		println("Deck" + d + win_lose + "test")
+		//println("Deck" + d + win_lose + "test")
 		results, err := db.Query(win_day_all_query)
 		if err != nil {
 			panic(err.Error()) // proper error handling instead of panic in your app
@@ -534,7 +534,7 @@ func gameByDay(d string, win_lose string) []string {
 			}
 			finalstring := fmt.Sprint(deckname + "|" + day + "|" + strconv.Itoa(max_win))
 			finalresults = append(finalresults, finalstring)
-			println("Final String: " + finalstring)
+			//println("Final String: " + finalstring)
 		}
 	} else if d != "n" && win_lose == "lose" {
 		results := db.QueryRow(lose_day_query, d)

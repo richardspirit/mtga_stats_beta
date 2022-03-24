@@ -24,6 +24,7 @@ export default function Games() {
             }
         ],[]
     );
+    const [Column, setColumn] = useState([])
 
     const gameOptions = [{
             label: "Best Day",
@@ -39,7 +40,7 @@ export default function Games() {
     const [Row, getRow] = useState([]);
     let url = endpoint + `/api/anal/gamesbyday`;
     const data = [];
-    const [AnalData, setAnalData] = useState([]);
+    const [analyData, setAnalyData] = useState([]);
 
     const getWinData = async () => {
       await fetch(url,{
@@ -125,33 +126,44 @@ export default function Games() {
         deckname.push(rowObj);
     });
 
-     const [selectedOption, setSelectedOption] = useState(null);
+        useEffect (() => {
+            window.addEventListener('onChange', handleChange)
+            window.removeEventListener('onChange', handleChange)
+        },[gameOption, deckOption, Column])
 
+    const getState = (props) => {
+        if (props.value === "Best Day"){
+            setGameOption("win")
+            //columns.splice(1,2,{Header: "Best Day", accessor: "day"},{Header: "Most Wins", accessor: "winsloses"})
+            //setColumn(columns);
+        } else if (props.value === "Worst Day") {
+            setGameOption("lose")
+            //columns.splice(1,2,{Header: "Worst Day", accessor: "day"},{Header: "Most Loses", accessor: "winsloses"})
+            //setColumn(columns);
+        }
+    }
      const handleChange = (obj) => {
-         setSelectedOption(obj);
+
          let analData = [];
          let allDecks
-        console.log(obj)
-        console.log(gameOption)
-        console.log(deckOption)
-        console.log("Test Options")
-         if (obj.value === "Best Day"){
-             setGameOption("win");
-         } else if (obj.value === "Worst Day"){
-             setGameOption("lose")
-         }
+
+         getState(obj);
 
          if ((obj.value === "All" && gameOption === "win") || (obj.value === "Best Day" && deckOption === "n")){
+            columns.splice(1,2,{Header: "Best Day", accessor: "day"},{Header: "Most Wins", accessor: "winsloses"})
+            setColumn(columns)
             allDecks = "n";
-            setGameOption("win");
             setDeckOption(allDecks);
-            setAnalData(data);
+            setAnalyData(data);
          } else if ((obj.value === "All" && gameOption === "lose") || (obj.value === "Worst Day" && deckOption === "n")){
+            columns.splice(1,2,{Header: "Worst Day", accessor: "day"},{Header: "Most Loses", accessor: "winsloses"})
+            setColumn(columns)
             allDecks = "n";
-            setGameOption("lose");
             setDeckOption(allDecks);
-            setAnalData(dataLose);
+            setAnalyData(dataLose);
          } else if ((obj.value !== "All" && gameOption === "win") || (obj.value === "Best Day" && deckOption !== "n")){
+            columns.splice(1,2,{Header: "Best Day", accessor: "day"},{Header: "Most Wins", accessor: "winsloses"})
+            setColumn(columns)
             if (obj.value !== "Best Day" && obj.value !== "Worst Day"){
                 setDeckOption(obj.value);
                 analData.shift();
@@ -160,41 +172,40 @@ export default function Games() {
                 analData.shift();
                 analData.push(data.find(element => element.deck === deckOption));
             }
-            setGameOption("win")
-            setAnalData(analData);
+            setAnalyData(analData);
          } else if ((obj.value !== "All" && gameOption === "lose")|| (obj.value === "Worst Day" && deckOption !== "n")){
-            if (obj.value !== "Worst Day" && gameOption !== "Best Day"){
+            columns.splice(1,2,{Header: "Worst Day", accessor: "day"},{Header: "Most Loses", accessor: "winsloses"})
+            setColumn(columns)
+            if (obj.value !== "Worst Day" && obj.value !== "Best Day"){
                 setDeckOption(obj.value);
                 analData.shift();
                 analData.push(dataLose.find(element => element.deck === obj.value));
             } else {
                 analData.shift();
                 analData.push(dataLose.find(element => element.deck === deckOption));
-            }
-            console.log("test")
-            console.log(dataLose)
-            setGameOption("lose")
-            setAnalData(analData);
+            } 
+            setAnalyData(analData);
          }
+         //console.log(analyData)
      }
 
     return (
         <>
             <main className={styles.main}>
             <div>
-                <h1 className={styles.title}>Games By Date</h1>
+                <h1 className={styles.title}>Best and Worst Days</h1>
             </div>
             <div>
                 <Select
-                    defaultValue={selectedOption}
+                    defaultValue={deckOption}
                     onChange={handleChange}
                     options={deckname} />
                 <Select
-                    defaultValue={selectedOption}
+                    defaultValue={gameOption}
                     onChange={handleChange}
                     options={gameOptions} />
             </div>
-            <ResultQuery columns={columns} data={AnalData}/>
+            <ResultQuery columns={Column} data={analyData}/>
             <Link href="/">
                 <a>Back Home</a>
             </Link>
