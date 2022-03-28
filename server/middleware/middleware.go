@@ -98,6 +98,15 @@ func GameByDay(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(payload)
 }
 
+func GameByDayWeek(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Context-Type", "application/x-www-form-urlencoded")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	var anal models.Anal
+	_ = json.NewDecoder(r.Body).Decode(&anal)
+	payload := gameByDayWeek(anal.Day, anal.Deck, anal.Winsloses)
+	json.NewEncoder(w).Encode(payload)
+}
+
 func drank() []string {
 	// Open up our database connection.
 	db := processing.Opendb()
@@ -501,7 +510,7 @@ func gameByDay(d string, win_lose string) []string {
 		lose_day_all_query string
 		finalresults       []string
 	)
-	println("Deck" + d + win_lose + "test")
+
 	win_day_query = "SELECT deck, MAX(win_count) as max_win, day_of_week FROM mtga.wins_by_day WHERE deck=? AND deck IN (SELECT name FROM mtga.decks) GROUP BY deck, day_of_week ORDER BY win_count DESC LIMIT 1"
 	win_day_all_query = "SELECT deck, win_count, day_of_week FROM mtga.most_wbd WHERE deck IN (SELECT name FROM mtga.decks) ORDER BY FIELD(day_of_week , 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'), win_count DESC;"
 	lose_day_query = "SELECT deck, MAX(lose_count) as max_loses, day_of_week FROM mtga.loses_by_day WHERE deck=? AND deck IN (SELECT name FROM mtga.decks) GROUP BY deck, day_of_week ORDER BY lose_count DESC LIMIT 1"
@@ -534,7 +543,6 @@ func gameByDay(d string, win_lose string) []string {
 			}
 			finalstring := fmt.Sprint(deckname + "|" + day + "|" + strconv.Itoa(max_win))
 			finalresults = append(finalresults, finalstring)
-			//println("Final String: " + finalstring)
 		}
 	} else if d != "n" && win_lose == "lose" {
 		results := db.QueryRow(lose_day_query, d)
@@ -560,6 +568,123 @@ func gameByDay(d string, win_lose string) []string {
 				panic(err.Error()) // proper error handling instead of panic in your app
 			}
 			finalstring := fmt.Sprint(deckname + "|" + day + "|" + strconv.Itoa(max_lose))
+			finalresults = append(finalresults, finalstring)
+		}
+	}
+	return finalresults
+}
+
+func gameByDayWeek(day string, d string, win_lose string) []string {
+	// Open up our database connection.
+	db := processing.Opendb()
+	// defer the close till after the main function has finished
+	// executing
+	defer db.Close()
+
+	var (
+		deckname       string
+		week_day       string
+		wl_count       int
+		wkdy_best      string
+		wkdy_worst     string
+		wkdy_all_best  string
+		wkdy_all_worst string
+		finalresults   []string
+	)
+
+	wkdy_best = "SELECT deck, win_count FROM mtga.wins_by_day WHERE day_of_week =? AND deck IN (SELECT name FROM mtga.decks) ORDER BY win_count DESC LIMIT 1"
+	wkdy_worst = "SELECT deck, lose_count FROM mtga.loses_by_day WHERE day_of_week =? AND deck IN (SELECT name FROM mtga.decks) ORDER BY lose_count DESC LIMIT 1"
+	wkdy_all_best = "SELECT day_of_week, deck, win_count FROM mtga.wins_by_day WHERE deck IN (SELECT name FROM mtga.decks) ORDER BY win_count"
+	wkdy_all_worst = "SELECT day_of_week, deck, lose_count FROM mtga.loses_by_day WHERE deck IN (SELECT name FROM mtga.decks) ORDER BY lose_count"
+
+	if d == "best" {
+		results := db.QueryRow(wkdy_best, day)
+		err := results.Scan(&deckname, &wl_count)
+		if err != nil {
+			if strings.Contains(err.Error(), "no rows in result set") {
+				fmt.Println("No Games Recored for this Deck")
+			} else {
+				panic(err.Error())
+			}
+		}
+		finalstring := fmt.Sprint(day + "|" + deckname + "|" + strconv.Itoa(wl_count))
+		finalresults = append(finalresults, finalstring)
+	} else if d == "worst" {
+		results := db.QueryRow(wkdy_worst, day)
+		err := results.Scan(&deckname, &wl_count)
+		if err != nil {
+			if strings.Contains(err.Error(), "no rows in result set") {
+				fmt.Println("No Games Recored for this Deck")
+			} else {
+				panic(err.Error())
+			}
+		}
+		finalstring := fmt.Sprint(day + "|" + deckname + "|" + strconv.Itoa(wl_count))
+		finalresults = append(finalresults, finalstring)
+	} else if win_lose == "w" && d != "all" {
+		results := db.QueryRow("SELECT win_count FROM mtga.wins_by_day WHERE day_of_week =? AND deck =?", day, d)
+		err := results.Scan(&wl_count)
+		if err != nil {
+			if strings.Contains(err.Error(), "no rows in result set") {
+				fmt.Println("No Wins Recored for this Deck and this Day")
+			} else {
+				panic(err.Error())
+			}
+		}
+		finalstring := fmt.Sprint(day + "|" + deckname + "|" + strconv.Itoa(wl_count))
+		finalresults = append(finalresults, finalstring)
+	} else if win_lose == "l" && d != "all" {
+		results := db.QueryRow("SELECT lose_count FROM mtga.loses_by_day WHERE day_of_week =? AND deck =?", day, d)
+		err := results.Scan(&wl_count)
+		if err != nil {
+			if strings.Contains(err.Error(), "no rows in result set") {
+				fmt.Println("No Loses Recored for this Deck and this Day")
+			} else {
+				panic(err.Error())
+			}
+		}
+		finalstring := fmt.Sprint(day + "|" + deckname + "|" + strconv.Itoa(wl_count))
+		finalresults = append(finalresults, finalstring)
+	} else if win_lose == "w" && d == "all" {
+		results, err := db.Query(wkdy_all_best)
+		if err != nil {
+			if strings.Contains(err.Error(), "no rows in result set") {
+				fmt.Println("No Wins Recorded for this Day")
+			} else {
+				panic(err.Error())
+			}
+		}
+		for results.Next() {
+
+			// for each row, scan the result into our deck composite object
+			err = results.Scan(&week_day, &deckname, &wl_count)
+
+			if err != nil {
+				panic(err.Error()) // proper error handling instead of panic in your app
+			}
+
+			// and then print out the tag's Name attribute
+			finalstring := fmt.Sprint(week_day + "|" + deckname + "|" + strconv.Itoa(wl_count))
+
+			finalresults = append(finalresults, finalstring)
+		}
+	} else if win_lose == "l" && d == "all" {
+		results, err := db.Query(wkdy_all_worst)
+		if err != nil {
+			if strings.Contains(err.Error(), "no rows in result set") {
+				fmt.Println("No Loses Recored for this Day")
+			} else {
+				panic(err.Error())
+			}
+		}
+		for results.Next() {
+			// for each row, scan the result into our deck composite object
+			err = results.Scan(&week_day, &deckname, &wl_count)
+			if err != nil {
+				panic(err.Error()) // proper error handling instead of panic in your app
+			}
+			// and then print out the tag's Name attribute
+			finalstring := fmt.Sprint(week_day + "|" + deckname + "|" + strconv.Itoa(wl_count))
 			finalresults = append(finalresults, finalstring)
 		}
 	}

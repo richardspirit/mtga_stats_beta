@@ -8,8 +8,7 @@ const endpoint = "http://localhost:8080";
 
 
 export default function Games() {
-    const columns = React.useMemo(
-        () => [
+    const columns = [
             {
                 Header: "Deck",
                 accessor: "deck"
@@ -22,9 +21,7 @@ export default function Games() {
                 Header: "Total Wins",
                 accessor: "winsloses"
             }
-        ],[]
-    );
-    const [Column, setColumn] = useState([])
+        ]
 
     const gameOptions = [{
             label: "Best Day",
@@ -36,6 +33,7 @@ export default function Games() {
     //console.log(gameOptions)
     const [deckOption, setDeckOption] = useState("n");
     const [gameOption, setGameOption] = useState("win");
+    const [column, setColumn] = useState([]);
 
     const [Row, getRow] = useState([]);
     let url = endpoint + `/api/anal/gamesbyday`;
@@ -129,7 +127,7 @@ export default function Games() {
         useEffect (() => {
             window.addEventListener('onChange', handleChange)
             window.removeEventListener('onChange', handleChange)
-        },[gameOption, deckOption, Column])
+        },[column])
 
     const getState = (props) => {
         if (props.value === "Best Day"){
@@ -143,7 +141,7 @@ export default function Games() {
         }
     }
      const handleChange = (obj) => {
-
+        try {
          let analData = [];
          let allDecks
 
@@ -187,6 +185,9 @@ export default function Games() {
             setAnalyData(analData);
          }
          //console.log(analyData)
+        } catch (error){
+            console.log(error)
+        }
      }
 
     return (
@@ -205,7 +206,7 @@ export default function Games() {
                     onChange={handleChange}
                     options={gameOptions} />
             </div>
-            <ResultQuery columns={Column} data={analyData}/>
+            <ResultQuery columns={column} data={analyData}/>
             <Link href="/">
                 <a>Back Home</a>
             </Link>
