@@ -32,5 +32,7 @@ type Game struct {
 type Anal struct {
 	Deck      string `json:"deck"`
 	Day       string `json:"day"`
+	Wins      string `json:"wins"`
+	Loses     string `json:"loses"`
 	Winsloses string `json:"winsloses"`
 }
