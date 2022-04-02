@@ -73,7 +73,7 @@ export default function Home() {
           </a>
 
           <a
-            href=''
+            href='reports/analysis'
             className={styles.card}
           >
             <h2>Analysis</h2>
@@ -106,7 +106,7 @@ export default function Home() {
         >
           Powered by{' '}
           <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
+            {/* <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} /> */}
           </span>
         </a>
       </footer>

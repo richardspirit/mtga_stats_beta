@@ -28,3 +28,11 @@ type Game struct {
 	MaxStreak     int    `json:"max_streak"`
 	GameType      string `json:"gametype"`
 }
+
+type Anal struct {
+	Deck      string `json:"deck"`
+	Day       string `json:"day"`
+	Wins      string `json:"wins"`
+	Loses     string `json:"loses"`
+	Winsloses string `json:"winsloses"`
+}

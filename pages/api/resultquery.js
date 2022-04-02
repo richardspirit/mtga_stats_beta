@@ -1,5 +1,5 @@
 import React from 'react';
-import {useTable} from 'react-table';
+import {useTable, useSortBy} from 'react-table';
 import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
 import store from '../app/store';

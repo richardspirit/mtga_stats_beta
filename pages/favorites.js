@@ -50,31 +50,9 @@ export default function TopTen() {
         rowObj.numwins = rowData[2];
         rowObj.numloses = rowData[3];
         data.push(rowObj);
-        console.log(data);
+        //console.log(data);
     });
 
-/*     const data = React.useMemo(
-        () => [
-            {
-                deck: "test",
-                date_entered: "2021-08-24",
-                numwins: 2,
-                numlose: 3
-            },
-            {
-                deck: "test2",
-                date_entered: "2021-12-24",
-                numwins: 23,
-                numlose: 33
-            },
-            {
-                deck: "test3",
-                date_entered: "2021-08-12",
-                numwins: 26,
-                numlose: 37
-            }
-        ],[]
-    ); */
     return (
         <>
             <main className={styles.main}>
