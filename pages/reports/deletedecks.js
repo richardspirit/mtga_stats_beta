@@ -13,18 +13,21 @@ export default function GamesReason() {
                 Header: "Deck", accessor: "deck",
             },
             {
-                Header: "GameTime", accessor: "time",
+                Header: "Date Entered", accessor: "dateentered",
             },
             {
-                Header: "Reason", accessor: "reason",
+                Header: "Win Percent", accessor: "winpct",
             },
             {
-                Header: "Result", accessor: "result",
+                Header: "Win Count", accessor: "winct",
+            },
+            {
+                Header: "Game Count", accessor: "gamect",
             }
         ],[]);
     
     const [Rows, getRows] = useState([]);
-    let url = endpoint + `/api/anal/gamesbytime`;
+    let url = endpoint + `/api/anal/deleterecommend`;
     const data = [];
     const getData = () => {
         fetch(url).then((res) => res.json())
@@ -42,9 +45,10 @@ export default function GamesReason() {
         const rowData = element.split("|");
         const rowObj = {};
         rowObj.deck = rowData[0];
-        rowObj.time = rowData[1];
-        rowObj.reason = rowData[2];
-        rowObj.result = rowData[3];  
+        rowObj.dateentered = rowData[1];
+        rowObj.winpct = rowData[2];
+        rowObj.winct = rowData[3];
+        rowObj.gamect = rowData[4];
         data.push(rowObj);
         //console.log(data)
     });
@@ -53,7 +57,7 @@ export default function GamesReason() {
         <>
             <main className={styles.main}>
             <div>
-                <h1 className={styles.title}>Wins/Loses Reasons</h1>
+                <h1 className={styles.title}>Decks Recommended To Delete</h1>
             </div>
             <Container style={{ marginTop: 100 }}>
                 <TableContainer columns={columns} data={data} />

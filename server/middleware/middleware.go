@@ -128,6 +128,13 @@ func GamesByLevel(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(payload)
 }
 
+func DeleteRecommend(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Context-Type", "application/x-www-urlencoded")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	payload := deleteRecommend()
+	json.NewEncoder(w).Encode(payload)
+}
+
 func drank() []string {
 	// Open up our database connection.
 	db := processing.Opendb()
@@ -653,11 +660,13 @@ func gamesByTime() []string {
 		deck         string
 		cause        string
 		hour         string
+		result       int
 		tm_query     string
+		gmRes        string
 		finalresults []string
 	)
 
-	tm_query = "SELECT deck, cause, TIME(`Timestamp`) AS playtime FROM mtga.games WHERE deck IN (SELECT name FROM mtga.decks) ORDER BY deck"
+	tm_query = "SELECT deck, cause, TIME(`Timestamp`), results AS playtime FROM mtga.games WHERE deck IN (SELECT name FROM mtga.decks) ORDER BY deck"
 	results, err := db.Query(tm_query)
 
 	if err != nil {
@@ -670,11 +679,17 @@ func gamesByTime() []string {
 
 	for results.Next() {
 		// for each row, scan the result into our deck composite object
-		err = results.Scan(&deck, &cause, &hour)
+		err = results.Scan(&deck, &cause, &hour, &result)
 		if err != nil {
 			panic(err.Error()) // proper error handling instead of panic in your app
 		}
 		// and then print out the tag's Name attribute
+		if result == 0 {
+			gmRes = "Won"
+		} else if result == 1 {
+			gmRes = "Lost"
+		}
+
 		layout1 := "03:04:05 PM"
 		layout2 := "15:04:05"
 		t, err := time.Parse(layout2, hour)
@@ -683,7 +698,7 @@ func gamesByTime() []string {
 		}
 
 		fhour := fmt.Sprintf("%-25s", t.Format(layout1))
-		finalstring := fmt.Sprint(deck + "|" + fhour + "|" + cause)
+		finalstring := fmt.Sprint(deck + "|" + fhour + "|" + cause + "|" + gmRes)
 		finalresults = append(finalresults, finalstring)
 	}
 	return finalresults
@@ -730,6 +745,47 @@ func gamesByLevel() []string {
 		}
 
 		finalstring := fmt.Sprint(deck + "|" + opp + "|" + level + "|" + cause + "|" + gmRes)
+		finalresults = append(finalresults, finalstring)
+	}
+	return finalresults
+}
+
+func deleteRecommend() []string {
+	// Open up our database connection.
+	db := processing.Opendb()
+	// defer the close till after the main function has finished
+	defer db.Close()
+
+	var (
+		deck         string
+		date_entered time.Time
+		win_pct      float32
+		win_count    int
+		games        int
+		finalresults []string
+	)
+
+	results, err := db.Query("SELECT name, date_entered, win_pct, win_count, games FROM mtga.decks d JOIN mtga.win_percentage wp ON d.name = wp.deck WHERE win_pct <= .40 ORDER BY games DESC, name")
+
+	if err != nil {
+		if strings.Contains(err.Error(), "no rows in result set") {
+			fmt.Println("No Decks Recommended for Deleting")
+		} else {
+			panic(err.Error())
+		}
+	}
+	for results.Next() {
+		// for each row, scan the result into our deck composite object
+		err = results.Scan(&deck, &date_entered, &win_pct, &win_count, &games)
+		if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+		}
+		// and then print out the tag's Name attribute
+		fdate := fmt.Sprintf("%0s", date_entered.Format("2006-01-02"))
+		cwin_pct := fmt.Sprintf("%f", win_pct)
+		cwin_pct = cwin_pct[2:4]
+		fwin_pct := cwin_pct + "%"
+		finalstring := fmt.Sprint(deck + "|" + fdate + "|" + fwin_pct + "|" + strconv.Itoa(win_count) + "|" + strconv.Itoa(games))
 		finalresults = append(finalresults, finalstring)
 	}
 	return finalresults
