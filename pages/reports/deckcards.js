@@ -10,21 +10,33 @@ const endpoint = "http://localhost:8080";
 export default function GamesReason() {
     const columns = useMemo (()=>[
             {
-                Header: "Deck", accessor: "deck",
+                Header: "Total Cards", accessor: "cardtotal",
             },
             {
-                Header: "GameTime", accessor: "time",
+                Header: "Land Total", accessor: "landtotal",
             },
             {
-                Header: "Reason", accessor: "reason",
+                Header: "Spell Total", accessor: "spelltotal",
             },
             {
-                Header: "Result", accessor: "result",
+                Header: "Creature Total", accessor: "creaturetotal",
+            },
+            {
+                Header: "Enchantment Total", accessor: "enchanttotal",
+            },
+            {
+                Header: "Artifact Total", accessor: "artifacttotal",
+            },
+            {
+                Header: "Wins", accessor: "wins",
+            },
+            {
+                Header: "Loses", accessor: "loses",
             }
         ],[]);
     
     const [Rows, getRows] = useState([]);
-    let url = endpoint + `/api/anal/gamesbytime`;
+    let url = endpoint + `/api/anal/deckbycards`;
     const data = [];
     const getData = () => {
         fetch(url).then((res) => res.json())
@@ -41,10 +53,14 @@ export default function GamesReason() {
     Rows.forEach(element => {
         const rowData = element.split("|");
         const rowObj = {};
-        rowObj.deck = rowData[0];
-        rowObj.time = rowData[1];
-        rowObj.reason = rowData[2];
-        rowObj.result = rowData[3];  
+        rowObj.cardtotal = rowData[0];
+        rowObj.landtotal = rowData[1];
+        rowObj.spelltotal = rowData[2];
+        rowObj.creaturetotal = rowData[3];
+        rowObj.enchanttotal = rowData[4];
+        rowObj.artifacttotal = rowData[5];
+        rowObj.wins = rowData[6];
+        rowObj.loses = rowData[7];
         data.push(rowObj);
         //console.log(data)
     });
@@ -53,7 +69,7 @@ export default function GamesReason() {
         <>
             <main className={styles.main}>
             <div>
-                <h1 className={styles.title}>Wins/Loses Reasons</h1>
+                <h1 className={styles.title}>Wins/Loses By Card Total</h1>
             </div>
             <Container style={{ marginTop: 100 }}>
                 <TableContainer columns={columns} data={data} />

@@ -55,30 +55,6 @@ export default function Home() {
             <p>Analyze wins and loses by total card number.</p>
           </a>
 
-          <a 
-            href='deckcreatures'
-            className={styles.card}
-          >
-            <h2>Deck By Number of Creatures</h2>
-            <p>Analyze wins and loses by total number of creatures.</p>
-          </a>
-
-          <a
-            href='decknoncreatures'
-            className={styles.card}
-          >
-            <h2>Decks By Number Non-Creatures</h2>
-            <p>Analyze wins and loses by total number of non-creatures.</p>
-          </a>
-
-          <a
-            href='decklands'
-            className={styles.card}
-          >
-            <h2>Decks By Number of Lands</h2>
-            <p>Analyze wins and loses by total number of lands.</p>
-          </a>
-
           <a
             href=''
             className={styles.card}
