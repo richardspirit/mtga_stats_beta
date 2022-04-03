@@ -198,13 +198,15 @@ export default function Games() {
             </div>
             <div>
                 <Select
-                    defaultValue={deckOption}
+                    //defaultValue={deckOption}
                     onChange={handleChange}
-                    options={deckname} />
+                    options={deckname} 
+                />
                 <Select
-                    defaultValue={gameOption}
+                    //defaultValue={gameOption}
                     onChange={handleChange}
-                    options={gameOptions} />
+                    options={gameOptions} 
+                />
             </div>
             <ResultQuery columns={column} data={analyData}/>
             <Link href="/">

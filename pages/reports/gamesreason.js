@@ -7,24 +7,21 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 const endpoint = "http://localhost:8080";
 
-export default function Games() {
+export default function GamesReason() {
     const columns = useMemo (()=>[
-            {
-                Header: "Day", accessor: "day",
-            },
             {
                 Header: "Deck", accessor: "deck",
             },
             {
-                Header: "Wins", accessor: "wins",
+                Header: "Reason", accessor: "reason",
             },
             {
-                Header: "Loses", accessor: "loses",
+                Header: "Results", accessor: "results",
             }
         ],[]);
     
     const [Rows, getRows] = useState([]);
-    let url = endpoint + `/api/anal/gamesbydayweek`;
+    let url = endpoint + `/api/anal/gamesbyreason`;
     const data = [];
     const getData = () => {
         fetch(url).then((res) => res.json())
@@ -40,10 +37,9 @@ export default function Games() {
     Rows.forEach(element => {
         const rowData = element.split("|");
         const rowObj = {};
-        rowObj.day = rowData[0];
-        rowObj.deck = rowData[1];
-        rowObj.wins = rowData[2];
-        rowObj.loses = rowData[3];    
+        rowObj.deck = rowData[0];
+        rowObj.reason = rowData[1];
+        rowObj.results = rowData[2];  
         data.push(rowObj);
         //console.log(data)
     });
@@ -52,7 +48,7 @@ export default function Games() {
         <>
             <main className={styles.main}>
             <div>
-                <h1 className={styles.title}>Wins/Loses By Day of the Week</h1>
+                <h1 className={styles.title}>Wins/Loses Reasons</h1>
             </div>
             <Container style={{ marginTop: 100 }}>
                 <TableContainer columns={columns} data={data} />
