@@ -114,6 +114,13 @@ func GamesByReason(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(payload)
 }
 
+func GamesByTime(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Context-Type", "application/x-www-form-urlencoded")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	payload := gamesByTime()
+	json.NewEncoder(w).Encode(payload)
+}
+
 func drank() []string {
 	// Open up our database connection.
 	db := processing.Opendb()
@@ -638,7 +645,7 @@ func gamesByReason() []string {
 		gmRes        string
 	)
 
-	rsn_query = "SELECT DISTINCT deck, cause, results FROM mtga.games ORDER BY deck"
+	rsn_query = "SELECT deck, cause, results FROM mtga.games ORDER BY deck"
 
 	results, err := db.Query(rsn_query)
 	if err != nil {
@@ -662,6 +669,52 @@ func gamesByReason() []string {
 		}
 		// and then print out the tag's Name attribute
 		finalstring := fmt.Sprint(deck + "|" + cause + "|" + gmRes)
+		finalresults = append(finalresults, finalstring)
+	}
+	return finalresults
+}
+
+func gamesByTime() []string {
+	// Open up our database connection.
+	db := processing.Opendb()
+	// defer the close till after the main function has finished
+	defer db.Close()
+
+	var (
+		deck         string
+		cause        string
+		hour         string
+		tm_query     string
+		finalresults []string
+	)
+
+	tm_query = "SELECT deck, cause, TIME(`Timestamp`) AS playtime FROM mtga.games ORDER BY deck"
+	results, err := db.Query(tm_query)
+
+	if err != nil {
+		if strings.Contains(err.Error(), "no rows in result set") {
+			fmt.Println("No Games Recorded.")
+		} else {
+			panic(err.Error())
+		}
+	}
+
+	for results.Next() {
+		// for each row, scan the result into our deck composite object
+		err = results.Scan(&deck, &cause, &hour)
+		if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+		}
+		// and then print out the tag's Name attribute
+		layout1 := "03:04:05 PM"
+		layout2 := "15:04:05"
+		t, err := time.Parse(layout2, hour)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		fhour := fmt.Sprintf("%-25s", t.Format(layout1))
+		finalstring := fmt.Sprint(deck + "|" + fhour + "|" + cause)
 		finalresults = append(finalresults, finalstring)
 	}
 	return finalresults
