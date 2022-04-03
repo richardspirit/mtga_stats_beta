@@ -135,6 +135,13 @@ func DeleteRecommend(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(payload)
 }
 
+func DecksByCardTotals(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Context-Type", "application/x-www-urlencoded")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	payload := decksByCardTotals()
+	json.NewEncoder(w).Encode(payload)
+}
+
 func drank() []string {
 	// Open up our database connection.
 	db := processing.Opendb()
@@ -786,6 +793,49 @@ func deleteRecommend() []string {
 		cwin_pct = cwin_pct[2:4]
 		fwin_pct := cwin_pct + "%"
 		finalstring := fmt.Sprint(deck + "|" + fdate + "|" + fwin_pct + "|" + strconv.Itoa(win_count) + "|" + strconv.Itoa(games))
+		finalresults = append(finalresults, finalstring)
+	}
+	return finalresults
+}
+
+func decksByCardTotals() []string {
+	// Open up our database connection.
+	db := processing.Opendb()
+	// defer the close till after the main function has finished
+	defer db.Close()
+
+	var (
+		cardtotal     int
+		landtotal     int
+		spelltotal    int
+		creaturetotal int
+		enchanttotal  int
+		artifacttotal int
+		win           int
+		lose          int
+		finalstring   string
+		crd_query     string
+		finalresults  []string
+	)
+
+	crd_query = "SELECT DISTINCT numcards, numlands, numspells, numcreatures, numenchant, numartifacts, r.wins, r.loses FROM mtga.decks d JOIN mtga.record r ON d.name = r.deck"
+
+	results, err := db.Query(crd_query)
+	if err != nil {
+		if strings.Contains(err.Error(), "no rows in result set") {
+			fmt.Println("No Games Recored for this Deck")
+		} else {
+			panic(err.Error())
+		}
+	}
+	for results.Next() {
+		// for each row, scan the result into our deck composite object
+		err = results.Scan(&cardtotal, &landtotal, &spelltotal, &creaturetotal, &enchanttotal, &artifacttotal, &win, &lose)
+		if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+		}
+		// and then print out the tag's Name attribute
+		finalstring = fmt.Sprint(strconv.Itoa(cardtotal) + "|" + strconv.Itoa(landtotal) + "|" + strconv.Itoa(spelltotal) + "|" + strconv.Itoa(creaturetotal) + "|" + strconv.Itoa(enchanttotal) + "|" + strconv.Itoa(artifacttotal) + "|" + strconv.Itoa(win) + "|" + strconv.Itoa(lose))
 		finalresults = append(finalresults, finalstring)
 	}
 	return finalresults
