@@ -107,6 +107,13 @@ func GameByDayWeek(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(payload)
 }
 
+func GamesByReason(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Context-Type", "application/x-www-form-urlencoded")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	payload := gamesByReason()
+	json.NewEncoder(w).Encode(payload)
+}
+
 func drank() []string {
 	// Open up our database connection.
 	db := processing.Opendb()
@@ -582,23 +589,14 @@ func gameByDayWeek() []string {
 	defer db.Close()
 
 	var (
-		deckname string
-		week_day string
-		//wl_count       int
-		//wkdy_best      string
-		//wkdy_worst     string
-		//wkdy_all_best  string
-		//wkdy_all_worst string
+		deckname     string
+		week_day     string
 		wins_loses   string
 		w_count      int
 		l_count      int
 		finalresults []string
 	)
 
-	//wkdy_best = "SELECT deck, win_count FROM mtga.wins_by_day WHERE day_of_week =? AND deck IN (SELECT name FROM mtga.decks) ORDER BY win_count DESC LIMIT 1"
-	//wkdy_worst = "SELECT deck, lose_count FROM mtga.loses_by_day WHERE day_of_week =? AND deck IN (SELECT name FROM mtga.decks) ORDER BY lose_count DESC LIMIT 1"
-	//wkdy_all_best = "SELECT day_of_week, deck, win_count FROM mtga.wins_by_day WHERE deck IN (SELECT name FROM mtga.decks) ORDER BY win_count"
-	//wkdy_all_worst = "SELECT day_of_week, deck, lose_count FROM mtga.loses_by_day WHERE deck IN (SELECT name FROM mtga.decks) ORDER BY lose_count"
 	wins_loses = "SELECT w.day_of_week, w.deck, w.win_count, l.lose_count FROM mtga.wins_by_day w JOIN mtga.loses_by_day l ON w.deck = l.deck AND w.day_of_week = l.day_of_week"
 
 	results, err := db.Query(wins_loses)
@@ -620,99 +618,51 @@ func gameByDayWeek() []string {
 
 		// and then print out the tag's Name attribute
 		finalstring := fmt.Sprint(week_day + "|" + deckname + "|" + strconv.Itoa(w_count) + "|" + strconv.Itoa(l_count))
-
 		finalresults = append(finalresults, finalstring)
 	}
-	/* 	if d == "best" {
-	   		results := db.QueryRow(wkdy_best, day)
-	   		err := results.Scan(&deckname, &wl_count)
-	   		if err != nil {
-	   			if strings.Contains(err.Error(), "no rows in result set") {
-	   				fmt.Println("No Games Recored for this Deck")
-	   			} else {
-	   				panic(err.Error())
-	   			}
-	   		}
-	   		finalstring := fmt.Sprint(day + "|" + deckname + "|" + strconv.Itoa(wl_count))
-	   		finalresults = append(finalresults, finalstring)
-	   	} else if d == "worst" {
-	   		results := db.QueryRow(wkdy_worst, day)
-	   		err := results.Scan(&deckname, &wl_count)
-	   		if err != nil {
-	   			if strings.Contains(err.Error(), "no rows in result set") {
-	   				fmt.Println("No Games Recored for this Deck")
-	   			} else {
-	   				panic(err.Error())
-	   			}
-	   		}
-	   		finalstring := fmt.Sprint(day + "|" + deckname + "|" + strconv.Itoa(wl_count))
-	   		finalresults = append(finalresults, finalstring)
-	   	} else if win_lose == "w" && d != "all" {
-	   		results := db.QueryRow("SELECT win_count FROM mtga.wins_by_day WHERE day_of_week =? AND deck =?", day, d)
-	   		err := results.Scan(&wl_count)
-	   		if err != nil {
-	   			if strings.Contains(err.Error(), "no rows in result set") {
-	   				fmt.Println("No Wins Recored for this Deck and this Day")
-	   			} else {
-	   				panic(err.Error())
-	   			}
-	   		}
-	   		finalstring := fmt.Sprint(day + "|" + deckname + "|" + strconv.Itoa(wl_count))
-	   		finalresults = append(finalresults, finalstring)
-	   	} else if win_lose == "l" && d != "all" {
-	   		results := db.QueryRow("SELECT lose_count FROM mtga.loses_by_day WHERE day_of_week =? AND deck =?", day, d)
-	   		err := results.Scan(&wl_count)
-	   		if err != nil {
-	   			if strings.Contains(err.Error(), "no rows in result set") {
-	   				fmt.Println("No Loses Recored for this Deck and this Day")
-	   			} else {
-	   				panic(err.Error())
-	   			}
-	   		}
-	   		finalstring := fmt.Sprint(day + "|" + deckname + "|" + strconv.Itoa(wl_count))
-	   		finalresults = append(finalresults, finalstring)
-	   	} else if win_lose == "w" && d == "all" {
-	   		results, err := db.Query(wkdy_all_best)
-	   		if err != nil {
-	   			if strings.Contains(err.Error(), "no rows in result set") {
-	   				fmt.Println("No Wins Recorded for this Day")
-	   			} else {
-	   				panic(err.Error())
-	   			}
-	   		}
-	   		for results.Next() {
+	return finalresults
+}
 
-	   			// for each row, scan the result into our deck composite object
-	   			err = results.Scan(&week_day, &deckname, &wl_count)
+func gamesByReason() []string {
+	// Open up our database connection.
+	db := processing.Opendb()
+	// defer the close till after the main function has finished
+	defer db.Close()
 
-	   			if err != nil {
-	   				panic(err.Error()) // proper error handling instead of panic in your app
-	   			}
+	var (
+		cause        string
+		deck         string
+		rsn_query    string
+		gameResults  int
+		finalresults []string
+		gmRes        string
+	)
 
-	   			// and then print out the tag's Name attribute
-	   			finalstring := fmt.Sprint(week_day + "|" + deckname + "|" + strconv.Itoa(wl_count))
+	rsn_query = "SELECT DISTINCT deck, cause, results FROM mtga.games ORDER BY deck"
 
-	   			finalresults = append(finalresults, finalstring)
-	   		}
-	   	} else if win_lose == "l" && d == "all" {
-	   		results, err := db.Query(wkdy_all_worst)
-	   		if err != nil {
-	   			if strings.Contains(err.Error(), "no rows in result set") {
-	   				fmt.Println("No Loses Recored for this Day")
-	   			} else {
-	   				panic(err.Error())
-	   			}
-	   		}
-	   		for results.Next() {
-	   			// for each row, scan the result into our deck composite object
-	   			err = results.Scan(&week_day, &deckname, &wl_count)
-	   			if err != nil {
-	   				panic(err.Error()) // proper error handling instead of panic in your app
-	   			}
-	   			// and then print out the tag's Name attribute
-	   			finalstring := fmt.Sprint(week_day + "|" + deckname + "|" + strconv.Itoa(wl_count))
-	   			finalresults = append(finalresults, finalstring)
-	   		}
-	   	} */
+	results, err := db.Query(rsn_query)
+	if err != nil {
+		if strings.Contains(err.Error(), "no rows in result set") {
+			fmt.Println("No Games Recored for this Deck")
+		} else {
+			panic(err.Error())
+		}
+	}
+	for results.Next() {
+		// for each row, scan the result into our deck composite object
+		err = results.Scan(&deck, &cause, &gameResults)
+		if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+		}
+
+		if gameResults == 0 {
+			gmRes = "Won"
+		} else if gameResults == 1 {
+			gmRes = "Lost"
+		}
+		// and then print out the tag's Name attribute
+		finalstring := fmt.Sprint(deck + "|" + cause + "|" + gmRes)
+		finalresults = append(finalresults, finalstring)
+	}
 	return finalresults
 }

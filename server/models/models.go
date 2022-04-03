@@ -35,4 +35,5 @@ type Anal struct {
 	Wins      string `json:"wins"`
 	Loses     string `json:"loses"`
 	Winsloses string `json:"winsloses"`
+	Reason    string `json:"reason"`
 }

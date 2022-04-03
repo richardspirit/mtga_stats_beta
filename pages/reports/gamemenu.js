@@ -23,69 +23,6 @@ export default function Home() {
             <h2>Games By Day of The Week &rarr;</h2>
             <p>Analyze wins and loses by day of the Week.</p>
           </a>
-
-          <a
-            href="gamestime" className={styles.card}
-          >
-            <h2>Games By Time &rarr;</h2>
-            <p>Analyze wins and loses by time of day.</p>
-          </a>
-
-          <a
-            href="gameslevel"
-            className={styles.card}
-          >
-            <h2>Games By Level/Tier &rarr;</h2>
-            <p>Analyze wins and loses by Level/Tier.</p>
-          </a>
-
-          <a
-            href="deletedecks"
-            className={styles.card}
-          >
-            <h2>Delete Recommendations &rarr;</h2>
-            <p>Decks recommended to be deleted due to low win ratio.</p>
-          </a>
-
-          <a
-            href="deckcards"
-            className={styles.card}
-          >
-            <h2>Decks By Number of Cards &rarr;</h2>
-            <p>Analyze wins and loses by total card number.</p>
-          </a>
-
-          <a 
-            href='deckcreatures'
-            className={styles.card}
-          >
-            <h2>Deck By Number of Creatures</h2>
-            <p>Analyze wins and loses by total number of creatures.</p>
-          </a>
-
-          <a
-            href='decknoncreatures'
-            className={styles.card}
-          >
-            <h2>Decks By Number Non-Creatures</h2>
-            <p>Analyze wins and loses by total number of non-creatures.</p>
-          </a>
-
-          <a
-            href='decklands'
-            className={styles.card}
-          >
-            <h2>Decks By Number of Lands</h2>
-            <p>Analyze wins and loses by total number of lands.</p>
-          </a>
-
-          <a
-            href=''
-            className={styles.card}
-          >
-            <h2>Custom Reports</h2>
-            <p>Create your own reports.</p>
-          </a>
         </div>
       </main>
 
