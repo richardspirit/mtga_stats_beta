@@ -121,6 +121,13 @@ func GamesByTime(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(payload)
 }
 
+func GamesByLevel(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Context-Type", "application/x-www-urlencoded")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	payload := gamesByLevel()
+	json.NewEncoder(w).Encode(payload)
+}
+
 func drank() []string {
 	// Open up our database connection.
 	db := processing.Opendb()
@@ -224,8 +231,6 @@ func viewDecks() []string {
 
 		//format strings to be more readable
 		fcount := fmt.Sprintf("%0s: ", strconv.Itoa(count))
-		//deck.Name = fmt.Sprintf("%0s", deck.Name)
-		//deck.Colors = fmt.Sprintf("%0s", deck.Colors)
 		fdate := fmt.Sprintf("%0s", deck.Date_Entered.Format("2006-01-02"))
 		fmstreak := fmt.Sprintf("%0s", strconv.Itoa(mstreak))
 		finalrecord := fmt.Sprint(fcount + "|" + deck.Name + "|" + deck.Colors + "|" + fdate + "|" + fav + "|" + fmstreak)
@@ -336,10 +341,6 @@ func favorites() []string {
 			panic(err.Error()) // proper error handling instead of panic in your app
 		}
 		// and then print out the tag's Name attribute
-		//format strings to be more readable
-		//deck = fmt.Sprintf("%-25s", deck)
-		//fdate := fmt.Sprintf("%s", date_entered.Format("2006-01-02"))
-		//fwins := fmt.Sprintf("%-10s", strconv.Itoa(wins))
 		finalrecord := fmt.Sprint(deck + "|" + date_entered.Format("2006-01-02") + "|" + strconv.Itoa(wins) + "|" + strconv.Itoa(loses))
 		finalresult = append(finalresult, finalrecord)
 	}
@@ -375,14 +376,10 @@ func deckDetails() []string {
 
 	var (
 		vquery string
-		/* 			vquery_all string
-		   			order_col  string */
 	)
 
 	var d models.Deck
-	//DeckName = strings.TrimSuffix(strings.TrimSuffix(DeckName, "\r"), "\n")
-	//vquery = "SELECT name, colors, date_entered, favorite, max_streak, cur_streak, numcards, numlands, numspells, numcreatures, numenchant, numartifacts FROM mtga.decks WHERE name=?"
-	//results := db.QueryRow(vquery, DeckName)
+
 	vquery = "SELECT name, colors, date_entered, favorite, max_streak, cur_streak, numcards, numlands, numspells, numcreatures, numenchant, numartifacts FROM mtga.decks"
 	results, err := db.Query(vquery)
 	if err != nil {
@@ -405,34 +402,6 @@ func deckDetails() []string {
 		finalrecord := fmt.Sprint(d.Name + "|" + strconv.Itoa(d.Num_Cards) + "|" + strconv.Itoa(d.Num_Creat) + "|" + strconv.Itoa(d.Max_Streak) + "|" + d.Colors + "|" + strconv.Itoa(d.Num_Lands) + "|" + strconv.Itoa(d.Num_Enchant) + "|" + strconv.Itoa(d.Cur_Streak) + "|" + d.Date_Entered.Format("01-02-2006") + "|" + strconv.Itoa(d.Num_Spells) + "|" + strconv.Itoa(d.Num_Art) + "|" + sfav)
 		finalresults = append(finalresults, finalrecord)
 	}
-
-	//m := make(map[string]string)
-	// Set key/value pairs using typical `name[key] = val`
-	/* 			m["k1"] = fmt.Sprintf("%-30s", d.Name)
-	   			m["k2"] = fmt.Sprintf("%-20s", d.Colors)
-	   			m["k3"] = fmt.Sprintf("%-25s", d.Date_Entered.Format("01-02-2006"))
-	   			m["k4"] = fmt.Sprintf("%-15s", strconv.Itoa(d.Favorite))
-	   			m["k5"] = fmt.Sprintf("%-24s", strconv.Itoa(d.Max_Streak))
-	   			m["k6"] = fmt.Sprintf("%-11s", strconv.Itoa(d.Cur_Streak))
-	   			m["k7"] = fmt.Sprintf("%-23s", strconv.Itoa(d.Num_Cards))
-	   			m["k8"] = fmt.Sprintf("%-14s", strconv.Itoa(d.Num_Lands))
-	   			m["k9"] = fmt.Sprintf("%-35s", strconv.Itoa(d.Num_Spells))
-	   			m["k10"] = fmt.Sprintf("%-7s", strconv.Itoa(d.Num_Enchant))
-	   			m["k11"] = fmt.Sprintf("%-23s", strconv.Itoa(d.Num_Art))
-	   			m["k12"] = fmt.Sprintf("%-19s", strconv.Itoa(d.Num_Creat)) */
-	// print deck details
-	/* 			fmt.Println("Name:", m["k1"]+"Color:", m["k2"]+"Date Entered:", m["k3"]+"Favorite:", sfav)
-	   			fmt.Println("Total Cards:", m["k7"]+"Total Lands:", m["k8"]+"Total Instant/Sorcery:", m["k9"])
-	   			fmt.Println("Total Creatures:", m["k12"]+"Total Enchantments:", m["k10"]+"Total Artifacts:", m["k11"])
-	   			fmt.Println("Max Streak:", m["k5"]+"Current Streak:", m["k6"])
-	   			ret = d.Name */
-	//format strings to be more readable
-	//deck.Name = fmt.Sprintf("%s", deck.Name)
-	//deck.Colors = fmt.Sprintf("%s", deck.Colors)
-	//fdate := fmt.Sprintf("%s", deck.Date_Entered.Format("2006-01-02"))
-	//fmstreak := fmt.Sprintf("%s", strconv.Itoa(mstreak))
-	//finalrecord := fmt.Sprintf(d.Name + "|" + strconv.Itoa(d.Num_Cards) + "|" + strconv.Itoa(d.Num_Creat) + "|" + strconv.Itoa(d.Max_Streak) + "|" + d.Colors + "|" + "|" + strconv.Itoa(d.Num_Lands) + "|" + strconv.Itoa(d.Num_Enchant) + "|" + strconv.Itoa(d.Cur_Streak) + "|" + d.Date_Entered.Format("01-02-2006") + "|" + strconv.Itoa(d.Num_Spells) + "|" + strconv.Itoa(d.Num_Art) + "|" sfav)
-	//log.Println(finalrecord)
 	return finalresults
 }
 
@@ -645,7 +614,7 @@ func gamesByReason() []string {
 		gmRes        string
 	)
 
-	rsn_query = "SELECT deck, cause, results FROM mtga.games ORDER BY deck"
+	rsn_query = "SELECT deck, cause, results FROM mtga.games WHERE deck IN (SELECT name FROM mtga.decks) ORDER BY deck"
 
 	results, err := db.Query(rsn_query)
 	if err != nil {
@@ -688,7 +657,7 @@ func gamesByTime() []string {
 		finalresults []string
 	)
 
-	tm_query = "SELECT deck, cause, TIME(`Timestamp`) AS playtime FROM mtga.games ORDER BY deck"
+	tm_query = "SELECT deck, cause, TIME(`Timestamp`) AS playtime FROM mtga.games WHERE deck IN (SELECT name FROM mtga.decks) ORDER BY deck"
 	results, err := db.Query(tm_query)
 
 	if err != nil {
@@ -715,6 +684,52 @@ func gamesByTime() []string {
 
 		fhour := fmt.Sprintf("%-25s", t.Format(layout1))
 		finalstring := fmt.Sprint(deck + "|" + fhour + "|" + cause)
+		finalresults = append(finalresults, finalstring)
+	}
+	return finalresults
+}
+
+func gamesByLevel() []string {
+	// Open up our database connection.
+	db := processing.Opendb()
+	// defer the close till after the main function has finished
+	defer db.Close()
+
+	var (
+		deck         string
+		level        string
+		opp          string
+		cause        string
+		result       int
+		gmRes        string
+		lvl_query    string
+		finalresults []string
+	)
+
+	lvl_query = "SELECT deck, opponent, `level`, cause, results FROM mtga.games WHERE deck IN (SELECT name FROM mtga.decks) ORDER BY deck"
+	results, err := db.Query(lvl_query)
+
+	if err != nil {
+		if strings.Contains(err.Error(), "no rows in result set") {
+			fmt.Println("No Games Recored for this Deck")
+		} else {
+			panic(err.Error())
+		}
+	}
+	for results.Next() {
+		// for each row, scan the result into our deck composite object
+		err = results.Scan(&deck, &opp, &level, &cause, &result)
+		if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+		}
+		// and then print out the tag's Name attribute
+		if result == 0 {
+			gmRes = "Won"
+		} else if result == 1 {
+			gmRes = "Lost"
+		}
+
+		finalstring := fmt.Sprint(deck + "|" + opp + "|" + level + "|" + cause + "|" + gmRes)
 		finalresults = append(finalresults, finalstring)
 	}
 	return finalresults

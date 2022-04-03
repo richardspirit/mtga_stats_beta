@@ -24,5 +24,6 @@ func Router() *mux.Router {
 	router.HandleFunc("/api/anal/gamesbydayweek", middleware.GameByDayWeek).Methods("GET", "OPTIONS")
 	router.HandleFunc("/api/anal/gamesbyreason", middleware.GamesByReason).Methods("GET", "OPTIONS")
 	router.HandleFunc("/api/anal/gamesbytime", middleware.GamesByTime).Methods("GET", "OPTIONS")
+	router.HandleFunc("/api/anal/gamesbylevel", middleware.GamesByLevel).Methods("GET", "OPTIONS")
 	return router
 }
