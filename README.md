@@ -22,7 +22,11 @@ MariaDB/MySQL 10.6.4
 
 Golang version 1.17.4
 
-Go Dependencies: github.com/go-sql-driver/mysql v1.6.0 github.com/gorilla/mux v1.8.0
+Go Dependencies: 
+
+github.com/go-sql-driver/mysql 
+
+v1.6.0 github.com/gorilla/mux v1.8.0
 
 React version 17.0.2 - React dependencies in package.json need to be cleaned up but most of them will be needed. 
 
