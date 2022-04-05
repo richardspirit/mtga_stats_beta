@@ -1,5 +1,9 @@
 .container {
   padding: 0 2rem;
+  background-image: url("../public/fivemagics.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .main {
@@ -40,9 +44,11 @@
 }
 
 .title {
-  margin: 0;
+  margin: 100;
   line-height: 1.15;
   font-size: 4rem;
+  font-family: 'Brush Script MT', 'Brush Script Std', cursive;
+  color: red;
 }
 
 .title,
@@ -83,6 +89,7 @@
   border-radius: 10px;
   transition: color 0.15s ease, border-color 0.15s ease;
   max-width: 300px;
+  background-color: whitesmoke;
 }
 
 .card:hover,
@@ -113,4 +120,22 @@
     width: 100%;
     flex-direction: column;
   }
+}
+
+.newdeck {
+  padding-bottom: 20px; 
+  padding-top: 20px;
+  text-align: center;
+  font-weight: bold;
+  font-size: large;
+  color: black;
+}
+
+.newgame {
+  padding-bottom: 20px; 
+  padding-top: 20px;
+  text-align: center;
+  font-weight: bold;
+  font-size: large;
+  color: black;
 }

@@ -143,13 +143,13 @@ export default function NewGame() {
 
     return (
         <>
-        <main className={styles.main}>
+        <main className={styles.main} style={{backgroundImage: `url("./five_symbols.jpg")`, backgroundSize: 'cover'}}>
             <div>
-                <h1 className={styles.title}>Record New Game</h1>
+                <h1 className={styles.title} style={{color: 'blue', backgroundColor: 'rgba(52, 52, 52, 0.4)'}}>Record New Game</h1>
             </div>
-            <form onSubmit={newGame}>
-                <div className={styles.grid}>
-                    <label htmlFor="results">
+            <form onSubmit={newGame} style={{backgroundColor: 'grey', opacity: '85%'}}>
+
+                    <label htmlFor="results" className={styles.newgame}>
                         Results: 
                         <Select
                             onChange={handleChange}
@@ -158,7 +158,7 @@ export default function NewGame() {
                         />
                     </label>
                     
-                    <label htmlFor="deckname" >
+                    <label htmlFor="deckname" className={styles.newgame}>
                         <span>Deck Name </span>
                         <Select
                             defaultValue={deck}
@@ -167,11 +167,11 @@ export default function NewGame() {
                         />
                     </label>
                     
-                    <label htmlFor="oppname">
+                    <label htmlFor="oppname" className={styles.newgame}>
                         <span>Opponent Name </span>
                         <input id="oppname" type="text" />
                     </label>
-
+                <div className={styles.newgame}>
                     <label htmlFor="gamelvl">
                         Game Level: 
                         <Select
@@ -180,12 +180,12 @@ export default function NewGame() {
                             options={gameLevels}
                         />
                     </label>
-
-                    <label htmlFor="tier">
+                </div>
+                    <label htmlFor="tier" className={styles.newgame}>
                         <span>Tier: </span>
                         <input id="tier" type="number" min="1" max="4" />
                     </label>
-
+                <div className={styles.newgame}>
                     <label>
                         Game Type:
                         <Select
@@ -194,16 +194,19 @@ export default function NewGame() {
                             options={gameTypes}
                         />
                     </label>
-
+                </div>
+                <div className={styles.newgame}>
                     <label htmlFor="reason">
                         <span>Reason: </span>
-                        <textarea id="reason" required />
+                        <textarea id="reason" required style={{width: '240px', height: '30px'}} />
                     </label>
+                </div>
+                <div style={{textAlign: 'center', paddingBottom: '10px'}}>
                     <button type="submit">Submit</button>
                 </div>
             </form>
             <Link href="/">
-                <a>Back Home</a>
+                <a style={{color: 'black', fontWeight: 'bold'}}>Back Home</a>
             </Link>
         </main>
         </>

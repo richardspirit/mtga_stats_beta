@@ -1,6 +1,5 @@
 import Link from "next/link";
 import styles from '../styles/Home.module.css'
-// import Layout from "../components/layout";
 let endpoint = "http://localhost:8080";
 
 export default function NewDeck(){
@@ -54,62 +53,65 @@ export default function NewDeck(){
 
     return (
         <>
-        <main className={styles.main}>
+        <main className={styles.main} style={{background: 'black', opacity: '90%', backgroundImage: `url("./lightning.jpg")`}}>
             <div>
-                <h1 className={styles.title}>Create New Deck</h1>
+                <h1 className={styles.title} style={{padding: '20px', color: 'black'}}>Create New Deck</h1>
             </div>
-            <form onSubmit={createDeck}>
-                <div className={styles.grid}>
-
+            <form onSubmit={createDeck} style={{minWidth: '1000px', minHeight: '220px', backgroundColor: 'grey', opacity: '85%'}}>
+                <div className={styles.newdeck}>
                     <label htmlFor="name">
-                        <span>Deck Name </span>
+                        <span> Deck Name </span>
                         <input id="name" type="text" required />
                     </label>
 
                     <label htmlFor="colors">
-                        <span>Colors </span>
+                        <span> Colors </span>
                         <input id="colors" type="text" />
                     </label>
                     
-                    <label htmlFor="favorite" >
-                        <span>Favorite </span>
-                        <input id="favorite" type="text" defaultValue="No" />
+                    <label htmlFor="favorite">
+                        <span> Favorite </span>
+                        <input id="favorite" type="text" defaultValue="No" style={{width: '40px'}} />
                     </label>
-                    
+                </div>
+                <div className={styles.newdeck}>
                     <label htmlFor="numcards">
-                        <span>Total Number of Cards </span>
-                        <input id="num_cards" type="text" defaultValue="0" />
+                        <span> Total Number of Cards </span>
+                        <input id="num_cards" type="text" defaultValue="0" style={{width: '40px'}}/>
                     </label>
 
                     <label htmlFor="numspells">
-                        <span>Total Instant/Sorceries </span>
-                        <input id="num_spells" type="text" defaultValue="0" />
+                        <span> Total Instant/Sorceries </span>
+                        <input id="num_spells" type="text" defaultValue="0" style={{width: '40px'}}/>
                     </label>
 
                     <label htmlFor="numcreature">
-                        <span>Total Creatures </span>
-                        <input id="num_creat" type="text" defaultValue="0" />
+                        <span> Total Creatures </span>
+                        <input id="num_creat" type="text" defaultValue="0" style={{width: '40px'}}/>
+                    </label>
+                </div>
+                <div className={styles.newdeck}>
+                    <label htmlFor="numlands" style={{padding: '20px'}}>
+                        <span> Total Lands </span>
+                        <input id="num_lands" type="text" defaultValue="0" style={{width: '40px'}}/>
                     </label>
 
-                    <label htmlFor="numlands">
-                        <span>Total Lands </span>
-                        <input id="num_lands" type="text" defaultValue="0" />
+                    <label htmlFor="numenchant" style={{padding: '20px'}}>
+                        <span> Total Enchantments </span>
+                        <input id="num_enchant" type="text" defaultValue="0" style={{width: '40px'}}/>
                     </label>
 
-                    <label htmlFor="numenchant">
-                        <span>Total Enchantments </span>
-                        <input id="num_enchant" type="text" defaultValue="0" />
+                    <label htmlFor="numartifact" style={{padding: '20px'}}>
+                        <span> Total Artifacts </span>
+                        <input id="num_art" type="text" defaultValue="0" style={{width: '40px'}}/>
                     </label>
-
-                    <label htmlFor="numartifact">
-                        <span>Total Artifacts </span>
-                        <input id="num_art" type="text" defaultValue="0" />
-                    </label>
+                </div>
+                <div style={{textAlign: 'center', paddingBottom: '10px'}}>
                     <button type="submit">Submit</button>
                 </div>
             </form>
             <Link href="/">
-                <a>Back Home</a>
+                <a style={{color: 'black'}}>Back Home</a>
             </Link>
         </main>
         </>
