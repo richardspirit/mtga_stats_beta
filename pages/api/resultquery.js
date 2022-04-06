@@ -1,5 +1,5 @@
 import React from 'react';
-import {useTable, useSortBy} from 'react-table';
+import {useTable, useSortBy, useResizeColumns} from 'react-table';
 import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
 import store from '../app/store';
@@ -27,7 +27,7 @@ export default function ResultQuery({columns, data}){
                 {headerGroups.map((headerGroup) => (
                     <tr {...headerGroup.getHeaderGroupProps()}>
                         {headerGroup.headers.map((column) => (
-                            <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+                            <th {...column.getHeaderProps({style: { minWidth: column.minWidth, width: column.width },})}>{column.render("Header")}</th>
                         ))}
                     </tr>
                 ))}
@@ -38,7 +38,7 @@ export default function ResultQuery({columns, data}){
                     return (
                         <tr {...row.getRowProps()}>
                             {row.cells.map((cell) =>{
-                                return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
+                                return <td {...cell.getCellProps({style: {minWidth: cell.column.minWidth, width: cell.column.width}})}>{cell.render("Cell")}</td>;
                             })}
                         </tr>
                     );

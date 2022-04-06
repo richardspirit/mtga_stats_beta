@@ -10,23 +10,38 @@ export default function TopTen() {
         () => [
             {
                 Header: "",
-                accessor: "num"
+                accessor: "num",
+                minWidth: 5,
+                width: 10,
+                maxWidth: 15
             },
             {
-                Header: "Deck",
-                accessor: "deck"
+                Header: () => (<div style={{textAlign: "left"}}>Deck</div>),
+                accessor: "deck",
+                minWidth: 5,
+                width: 200,
+                maxWidth: 250
             },
             {
-                Header: "Rank",
-                accessor: "rank"
+                Header: () => (<div style={{textAlign: "left"}}>Rank</div>),
+                accessor: "rank",
+                minWidth: 5,
+                width: 100,
+                maxWidth: 150
             },
             {
-                Header: "Wins",
-                accessor: "wins"
+                Header: () => (<div style={{textAlign: "left"}}>Wins</div>),
+                accessor: "wins",
+                minWidth: 5,
+                width: 100,
+                maxWidth: 150
             },
             {
-                Header: "Loses",
-                accessor: "loses"
+                Header: () => (<div style={{textAlign: "left"}}>Loses</div>),
+                accessor: "loses",
+                minWidth: 5,
+                width: 100,
+                maxWidth: 150
             }
         ],[]
     );
@@ -60,13 +75,15 @@ export default function TopTen() {
 
     return (
         <>
-            <main className={styles.main}>
+            <main className={styles.main} style={{backgroundImage: `url("./mtgvow_sorin_markov_2560x1600.jpg")`, backgroundSize: 'cover'}}>
             <div>
-                <h1 className={styles.title}>Deck Ranking</h1>
+                <h1 className={styles.title}>Top Ten Decks</h1>
             </div>
+            <div style={{backgroundColor: 'rgba(255, 10, 10, 0.5)'}}>
             <RankQuery columns={columns} data={data}/>
+            </div>
             <Link href="/">
-                <a>Back Home</a>
+                <a style={{color: 'white'}}>Back Home</a>
             </Link>
             </main>
         </>
