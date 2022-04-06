@@ -9,28 +9,43 @@ export default function ViewDecks() {
     const columns = React.useMemo(
         () => [
             {
-                Header: "Deck Number",
-                accessor: "count"
+                Header: "",
+                accessor: "count",
+                minWidth: 5,
+                width: 10,
+                maxWidth: 15
             },
             {
-                Header: "Deck",
-                accessor: "deck"
+                Header: () => (<div style={{textAlign: "left"}}>Deck</div>),
+                accessor: "deck",
+                minWidth: 5,
+                width: 200,
+                maxWidth: 250
             },
             {
-                Header: "Color/s",
-                accessor: "color"
+                Header: () => (<div style={{textAlign: "left"}}>Color/s</div>),
+                accessor: "color",
+                minWidth: 5,
+                width: 200,
+                maxWidth: 250
             },
             {
-                Header: "Date Entered",
+                Header: () => (<div style={{textAlign: "left"}}>Date Entered</div>),
                 accessor: "date_entered"
             },
             {
-                Header: "Favorite",
-                accessor: "favorite"
+                Header: () => (<div style={{textAlign: "left"}}>Favorite</div>),
+                accessor: "favorite",
+                minWidth: 5,
+                width: 100,
+                maxWidth: 150
             },
             {
-                Header: "Max Streak",
-                accessor: "maxstreak"
+                Header: () => (<div style={{textAlign: "left"}}>Max Streak</div>),
+                accessor: "maxstreak",
+                minWidth: 5,
+                width: 100,
+                maxWidth: 150
             }
         ],[]
     );
@@ -65,11 +80,13 @@ export default function ViewDecks() {
 
     return (
         <>
-            <main className={styles.main}>
+            <main className={styles.main} style={{backgroundImage: `url("./the_five_dragons-sl-background-1280x960.jpg")`, backgroundSize: 'cover'}}>
             <div>
-                <h1 className={styles.title}>Deck Summary</h1>
+                <h1 className={styles.title} style={{backgroundColor: 'rgba(104, 99, 226, 0.4)'}}>Deck Summary</h1>
             </div>
+            <div style={{backgroundColor: 'rgba(104, 99, 230, 0.8)'}}>
             <RankQuery columns={columns} data={data}/>
+            </div>
             <Link href="/">
                 <a>Back Home</a>
             </Link>

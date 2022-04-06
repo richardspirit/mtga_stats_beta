@@ -9,11 +9,14 @@ export default function GameCount() {
     const columns = React.useMemo(
         () => [
             {
-                Header: "Deck",
-                accessor: "deck"
+                Header: () => (<div style={{textAlign: "left"}}>Deck</div>),
+                accessor: "deck",
+                minWidth: 5,
+                width: 500,
+                maxWidth: 1000
             },
             {
-                Header: "Game Count",
+                Header: () => (<div style={{textAlign: "left"}}>Game Count</div>),
                 accessor: "gamecount"
             }
         ],[]
@@ -43,31 +46,17 @@ export default function GameCount() {
         console.log(data);
     });
 
-/*     const data = React.useMemo(
-        () => [
-            {
-                deck: "gamecount",
-                gamecount: 30
-            },
-            {
-                deck: "gamecount2",
-                gamecount: 301
-            },
-            {
-                deck: "gamecount3",
-                gamecount: 3
-            }
-        ],[]
-    ); */
     return (
         <>
-            <main className={styles.main}>
+            <main className={styles.main} style={{backgroundImage: `url("./mtgsnc_metropolis_forest_1280x960.jpg")`, backgroundSize: 'cover'}}>
             <div>
                 <h1 className={styles.title}>Game Count</h1>
             </div>
+            <div style={{backgroundColor: 'rgba(255,255,0, 0.5)'}}>
             <RankQuery columns={columns} data={data}/>
+            </div>
             <Link href="/">
-                <a>Back Home</a>
+                <a style={{color: 'white'}}>Back Home</a>
             </Link>
             </main>
         </>

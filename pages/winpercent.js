@@ -9,20 +9,32 @@ export default function TopTen() {
     const columns = React.useMemo(
         () => [
             {
-                Header: "Deck",
-                accessor: "deck"
+                Header: () => (<div style={{textAlign: "left"}}>Deck</div>),
+                accessor: "deck",
+                minWidth: 150,
+                width: 200,
+                maxWidth: 250
             },
             {
-                Header: "Win Percentage",
-                accessor: "winpercent"
+                Header: () => (<div style={{textAlign: "left"}}>Win Percentage</div>),
+                accessor: "winpercent",
+                minWidth: 150,
+                width: 100,
+                maxWidth: 250
             },
             {
-                Header: "Number of Wins",
-                accessor: "numwins"
+                Header: () => (<div style={{textAlign: "left"}}>Number of Wins</div>),
+                accessor: "numwins",
+                minWidth: 150,
+                width: 100,
+                maxWidth: 250
             },
             {
-                Header: "Number of Games",
-                accessor: "numgame"
+                Header: () => (<div style={{textAlign: "left"}}>Number of Games</div>),
+                accessor: "numgame",
+                minWidth: 150,
+                width: 100,
+                maxWidth: 250
             }
         ],[]
     );
@@ -53,37 +65,17 @@ export default function TopTen() {
         console.log(data);
     });
 
-/*     const data = React.useMemo(
-        () => [
-            {
-                deck: "test",
-                winpercent: "21%",
-                numwins: 2,
-                numgame: 3
-            },
-            {
-                deck: "test2",
-                winpercent: "50%",
-                numwins: 12,
-                numgame: 23
-            },
-            {
-                deck: "test3",
-                winpercent: "60%",
-                numwins: 24,
-                numgame: 34
-            }
-        ],[]
-    ); */
     return (
         <>
-            <main className={styles.main}>
+            <main className={styles.main} style={{backgroundImage: `url("./mtgmid_wrenn_and_seven_2560x1600.jpg")`, backgroundSize: 'cover'}}>
             <div>
                 <h1 className={styles.title}>Win Percentage</h1>
             </div>
-            <RankQuery columns={columns} data={data}/>
+            <div style={{backgroundColor: 'rgba(255, 165, 0, 0.5)'}}>
+                <RankQuery columns={columns} data={data}/>
+            </div>
             <Link href="/">
-                <a>Back Home</a>
+                <a style={{color: 'white'}}>Back Home</a>
             </Link>
             </main>
         </>
