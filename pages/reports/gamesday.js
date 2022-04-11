@@ -3,6 +3,7 @@ import styles from '../../styles/Home.module.css';
 import React, {useState, useEffect, useMemo} from 'react';
 import TableContainer from "../api/sort-table";
 import { Container } from "reactstrap";
+import { Helmet } from 'react-helmet';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const endpoint = "http://localhost:8080";
@@ -34,7 +35,7 @@ export default function Games() {
     };
 
     useEffect(() => {
-        getData()
+        getData();
     },[]);
 
     Rows.forEach(element => {
@@ -50,17 +51,19 @@ export default function Games() {
 
     return (
         <>
-            <main className={styles.main}>
-            <div>
-                <h1 className={styles.title}>Wins/Loses By Day of the Week</h1>
+            <div className={styles.analysis}>
+                <main className={styles.main}>
+                    <div>
+                        <h1 className={styles.analysis_title}>Wins/Loses By Day of the Week</h1>
+                    </div>
+                    <Container style={{ marginTop: 100 }}>
+                        <TableContainer columns={columns} data={data} />
+                    </Container>
+                    <Link href="/">
+                        <a>Back Home</a>
+                    </Link>
+                </main>
             </div>
-            <Container style={{ marginTop: 100 }}>
-                <TableContainer columns={columns} data={data} />
-            </Container>
-            <Link href="/">
-                <a>Back Home</a>
-            </Link>
-            </main>
         </>
     );
 }

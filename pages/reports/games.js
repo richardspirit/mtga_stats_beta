@@ -3,23 +3,31 @@ import styles from '../../styles/Home.module.css';
 import React, {useState, useEffect} from 'react';
 import ResultQuery from "../api/resultquery";
 import Select from 'react-select';
-// import Layout from "../components/layout";
 const endpoint = "http://localhost:8080";
 
 
 export default function Games() {
     const columns = [
             {
-                Header: "Deck",
-                accessor: "deck"
+                Header: () => (<div style={{textAlign: "left"}}>Deck</div>),
+                accessor: "deck",
+                minWidth: 150,
+                width: 250,
+                maxWidth: 300
             },
             {
-                Header: "Most Wins",
-                accessor: "day"
+                Header: () => (<div style={{textAlign: "left"}}>Most Wins</div>),
+                accessor: "day",
+                minWidth: 150,
+                width: 250,
+                maxWidth: 300
             },
             {
-                Header: "Total Wins",
-                accessor: "winsloses"
+                Header: () => (<div style={{textAlign: "left"}}>Total Wins</div>),
+                accessor: "winsloses",
+                minWidth: 150,
+                width: 250,
+                maxWidth: 300
             }
         ]
 
@@ -148,19 +156,36 @@ export default function Games() {
          getState(obj);
 
          if ((obj.value === "All" && gameOption === "win") || (obj.value === "Best Day" && deckOption === "n")){
-            columns.splice(1,2,{Header: "Best Day", accessor: "day"},{Header: "Most Wins", accessor: "winsloses"})
+            columns.splice(1,2,{
+                    Header: () => (<div style={{textAlign: "left"}}>Best Day</div>), 
+                    accessor: "day"
+                },{
+                    Header: () => (<div style={{textAlign: "left"}}>Most Wins</div>), 
+                    accessor: "winsloses"
+                })
             setColumn(columns)
             allDecks = "n";
             setDeckOption(allDecks);
             setAnalyData(data);
          } else if ((obj.value === "All" && gameOption === "lose") || (obj.value === "Worst Day" && deckOption === "n")){
-            columns.splice(1,2,{Header: "Worst Day", accessor: "day"},{Header: "Most Loses", accessor: "winsloses"})
+            columns.splice(1,2,{
+                Header: () => (<div style={{textAlign: "left"}}>Worst Day</div>), 
+                accessor: "day"
+            },{
+                Header: () => (<div style={{textAlign: "left"}}>Most Loses</div>), 
+                accessor: "winsloses"
+            })
             setColumn(columns)
             allDecks = "n";
             setDeckOption(allDecks);
             setAnalyData(dataLose);
          } else if ((obj.value !== "All" && gameOption === "win") || (obj.value === "Best Day" && deckOption !== "n")){
-            columns.splice(1,2,{Header: "Best Day", accessor: "day"},{Header: "Most Wins", accessor: "winsloses"})
+            columns.splice(1,2,{
+                Header: () => (<div style={{textAlign: "left"}}>Best Day</div>), 
+                accessor: "day"
+            },{
+                Header: () => (<div style={{textAlign: "left"}}>Most Wins</div>), 
+                accessor: "winsloses"})
             setColumn(columns)
             if (obj.value !== "Best Day" && obj.value !== "Worst Day"){
                 setDeckOption(obj.value);
@@ -172,7 +197,13 @@ export default function Games() {
             }
             setAnalyData(analData);
          } else if ((obj.value !== "All" && gameOption === "lose")|| (obj.value === "Worst Day" && deckOption !== "n")){
-            columns.splice(1,2,{Header: "Worst Day", accessor: "day"},{Header: "Most Loses", accessor: "winsloses"})
+            columns.splice(1,2,{
+                Header: () => (<div style={{textAlign: "left"}}>Worst Day</div>), 
+                accessor: "day"
+            },{
+                Header: () => (<div style={{textAlign: "left"}}>Most Loses</div>), 
+                accessor: "winsloses"
+            })
             setColumn(columns)
             if (obj.value !== "Worst Day" && obj.value !== "Best Day"){
                 setDeckOption(obj.value);
@@ -192,18 +223,17 @@ export default function Games() {
 
     return (
         <>
+        <div className={styles.analysis}>
             <main className={styles.main}>
             <div>
-                <h1 className={styles.title}>Best and Worst Days</h1>
+                <h1 className={styles.analysis_title}>Best and Worst Days</h1>
             </div>
             <div>
                 <Select
-                    //defaultValue={deckOption}
                     onChange={handleChange}
                     options={deckname} 
                 />
                 <Select
-                    //defaultValue={gameOption}
                     onChange={handleChange}
                     options={gameOptions} 
                 />
@@ -213,6 +243,7 @@ export default function Games() {
                 <a>Back Home</a>
             </Link>
             </main>
+        </div>
         </>
     );
 }

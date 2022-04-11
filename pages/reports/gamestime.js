@@ -51,9 +51,10 @@ export default function GamesReason() {
 
     return (
         <>
+        <div className={styles.analysis}>
             <main className={styles.main}>
             <div>
-                <h1 className={styles.title}>Wins/Loses Reasons</h1>
+                <h1 className={styles.analysis_title}>Wins/Loses Reasons</h1>
             </div>
             <Container style={{ marginTop: 100 }}>
                 <TableContainer columns={columns} data={data} />
@@ -62,6 +63,7 @@ export default function GamesReason() {
                 <a>Back Home</a>
             </Link>
             </main>
+        </div>
         </>
     );
 }

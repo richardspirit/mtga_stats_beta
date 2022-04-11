@@ -9,20 +9,32 @@ export default function TopTen() {
     const columns = React.useMemo(
         () => [
             {
-                Header: "Deck",
-                accessor: "deck"
+                Header: () => (<div style={{textAlign: "left"}}>Deck</div>),
+                accessor: "deck",
+                minWidth: 150,
+                width: 250,
+                maxWidth: 300
             },
             {
-                Header: "Date Entered",
-                accessor: "date_entered"
+                Header: () => (<div style={{textAlign: "left"}}>Date Entered</div>),
+                accessor: "date_entered",
+                minWidth: 50,
+                width: 150,
+                maxWidth: 200
             },
             {
-                Header: "Number of Wins",
-                accessor: "numwins"
+                Header: () => (<div style={{textAlign: "left"}}>Wins</div>),
+                accessor: "numwins",
+                minWidth: 5,
+                width: 100,
+                maxWidth: 150
             },
             {
-                Header: "Number of Loses",
-                accessor: "numloses"
+                Header: () => (<div style={{textAlign: "left"}}>Loses</div>),
+                accessor: "numloses",
+                minWidth: 5,
+                width: 100,
+                maxWidth: 150
             }
         ],[]
     );
@@ -55,13 +67,15 @@ export default function TopTen() {
 
     return (
         <>
-            <main className={styles.main}>
+            <main className={styles.main} style={{backgroundImage: `url("./brokers_ascendancy_2560x1600.jpg")`, backgroundSize: 'cover'}}>
             <div>
                 <h1 className={styles.title}>Favorites</h1>
             </div>
-            <RankQuery columns={columns} data={data}/>
+            <div style={{backgroundColor: 'rgba(210, 215, 211, 0.6)'}}>
+                <RankQuery columns={columns} data={data}/>
+            </div>
             <Link href="/">
-                <a>Back Home</a>
+                <a style={{color: 'white'}}>Back Home</a>
             </Link>
             </main>
         </>
