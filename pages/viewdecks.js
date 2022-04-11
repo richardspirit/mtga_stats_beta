@@ -2,7 +2,6 @@ import Link from "next/link";
 import styles from '../styles/Home.module.css';
 import React, {useState, useEffect} from 'react';
 import RankQuery from "./api/resultquery";
-// import Layout from "../components/layout";
 let endpoint = "http://localhost:8080";
 
 export default function ViewDecks() {
