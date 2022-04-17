@@ -9,34 +9,6 @@ let endpoint = "http://localhost:8080";
 export default function ImportSet() {
 
     const url = endpoint + "/api/importset";
-
-/*     const setFile = async event => {
-        //event.preventDefault();
-        const res  = await fetch(url, {
-            body: fn,
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            method: "POST"
-            })
-            .catch(err => {
-                if (err){
-                    alert("Set Already Exists")
-                }
-                console.log(err)
-            })}; */
-
-
-
-
-/*     useEffect(() => {
-        setFile();
-    },[])
-    setFile();
-
-    const fileClick = () => {
-        
-    } */
     const [openFileSelector, {filesContent, errors, loading, plainFiles}] = useFilePicker({
         multiple: false,
         accept: ['.txt', '.json']
