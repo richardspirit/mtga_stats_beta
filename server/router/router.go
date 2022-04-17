@@ -27,5 +27,6 @@ func Router() *mux.Router {
 	router.HandleFunc("/api/anal/gamesbylevel", middleware.GamesByLevel).Methods("GET", "OPTIONS")
 	router.HandleFunc("/api/anal/deleterecommend", middleware.DeleteRecommend).Methods("GET", "OPTIONS")
 	router.HandleFunc("/api/anal/deckbycards", middleware.DecksByCardTotals).Methods("GET", "OPTIONS")
+	router.HandleFunc("/api/importset", middleware.ImportSet).Methods("POST", "OPTIONS")
 	return router
 }

@@ -8,7 +8,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 const endpoint = "http://localhost:8080";
 
-export default function Games() {
+export default function GamesDay() {
     const columns = useMemo (()=>[
             {
                 Header: "Day", accessor: "day",

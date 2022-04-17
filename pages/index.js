@@ -88,7 +88,7 @@ export default function Home() {
           </a>
 
           <a
-            href=''
+            href='importset'
             className={styles.card}
           >
             <h2>Import Set Data</h2>
