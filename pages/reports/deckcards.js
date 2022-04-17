@@ -7,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 const endpoint = "http://localhost:8080";
 
-export default function GamesReason() {
+export default function DeckByCards() {
     const columns = useMemo (()=>[
             {
                 Header: "Total Cards", accessor: "cardtotal",

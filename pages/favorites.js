@@ -5,7 +5,7 @@ import RankQuery from "./api/resultquery";
 // import Layout from "../components/layout";
 let endpoint = "http://localhost:8080";
 
-export default function TopTen() {
+export default function Favorites() {
     const columns = React.useMemo(
         () => [
             {

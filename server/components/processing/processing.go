@@ -6,7 +6,7 @@ import (
 )
 
 func Opendb() *sql.DB {
-	db, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/mtga?parseTime=true")
+	db, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/mtga_test?parseTime=true")
 	// if there is an error opening the connection, handle it
 	if err != nil {
 		panic(err.Error())

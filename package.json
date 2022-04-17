@@ -29,7 +29,8 @@
     "reactstrap": "^9.0.1",
     "redux": "^4.1.2",
     "redux-persist": "^6.0.0",
-    "redux-thunk": "^2.4.1"
+    "redux-thunk": "^2.4.1",
+    "use-file-picker": "^1.4.2"
   },
   "devDependencies": {
     "eslint": "8.10.0",

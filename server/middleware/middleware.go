@@ -4,8 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"server/components/processing"
 	"server/models"
 	"strconv"
@@ -140,6 +142,15 @@ func DecksByCardTotals(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	payload := decksByCardTotals()
 	json.NewEncoder(w).Encode(payload)
+}
+
+func ImportSet(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Context-Type", "application/x-www-urlencoded")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	var file string
+	_ = json.NewDecoder(r.Body).Decode(&file)
+	error := importSet(file)
+	json.NewEncoder(w).Encode(error)
 }
 
 func drank() []string {
@@ -839,4 +850,98 @@ func decksByCardTotals() []string {
 		finalresults = append(finalresults, finalstring)
 	}
 	return finalresults
+}
+
+func importSet(fileName string) error {
+	// Open up our database connection.
+	db := processing.Opendb()
+	//set max connections
+	db.SetMaxOpenConns(1000)
+	db.SetMaxIdleConns(1000)
+	// defer the close till after the main function has finished
+	// executing
+	defer db.Close()
+
+	dir, _ := os.UserHomeDir()
+	println(dir)
+	println("File name: " + fileName)
+	dirFile := (dir + `\react_mtga\mtga_stats_beta\mtga_stats\server\AllSetFiles\` + fileName)
+	println(dirFile)
+
+	sfile, err := os.Open(dirFile)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer sfile.Close()
+
+	// read our opened jsonFile as a byte array.
+	byteValue, _ := ioutil.ReadAll(sfile)
+
+	var (
+		cards models.Cards
+		trows int
+		//s       string
+		setname string
+	)
+
+	json.Unmarshal(byteValue, &cards)
+
+	/* 	results := db.QueryRow("SELECT DISTINCT set_code FROM mtga.sets WHERE set_code=?", cards.Cards[0].SetCode)
+	   	err = results.Scan(&s)
+	   	if err == nil {
+	   		println("File has already been loaded: ", dirFile)
+	   		return nil
+	   	} */
+
+	// we iterate through every user within our cards array
+	for i := 0; i < len(cards.Cards); i++ {
+		nresult := db.QueryRow("SELECT DISTINCT set_name FROM mtga_test.set_abbreviations WHERE set_abbrev=?", cards.Cards[i].SetCode)
+		err = nresult.Scan(&setname)
+
+		if err != nil {
+			log.Println("Set Name is Missing")
+		}
+		//deal with arrays in json file
+		var (
+			colors     string
+			types      string
+			supertypes string
+			subtypes   string
+		)
+
+		for _, s := range cards.Cards[i].Colors {
+			colors = colors + s
+		}
+		for _, s := range cards.Cards[i].Subtypes {
+			subtypes = subtypes + s
+		}
+		for _, s := range cards.Cards[i].Supertypes {
+			supertypes = supertypes + s
+		}
+		for _, s := range cards.Cards[i].Types {
+			types = types + s
+		}
+		if cards.Cards[i].Layout == "split" || cards.Cards[i].Layout == "adventure" || cards.Cards[i].Layout == "aftermath" {
+			cards.Cards[i].ManaValue = cards.Cards[i].FaceManaValue
+			cards.Cards[i].ConvertedMana = cards.Cards[i].FaceConvertedMana
+		}
+		//println(colors)
+		// perform a db.Query insert
+		upresult, err := db.Exec("INSERT INTO mtga_test.sets(set_name, card_name, colors, mana_cost, mana_colors, converted_mana_cost, set_number, card_text, type, sub_type, super_type, types, rarity, set_code, card_side) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+			setname, cards.Cards[i].Name, colors, cards.Cards[i].ManaValue, cards.Cards[i].ManaCost, cards.Cards[i].ConvertedMana, cards.Cards[i].Number, cards.Cards[i].OriginalText, cards.Cards[i].Type, subtypes, supertypes, types, cards.Cards[i].Rarity, cards.Cards[i].SetCode, cards.Cards[i].Side)
+		if err != nil {
+			println(cards.Cards[i].Name)
+			log.Printf("Error %s when inserting row into sets table", err)
+			panic(err.Error())
+		}
+
+		rows, _ := upresult.RowsAffected()
+		//println(rows)
+		if err != nil {
+			log.Printf("Error %s when finding rows affected", err)
+			panic(err.Error())
+		}
+		trows = trows + int(rows)
+	}
+	return nil
 }
