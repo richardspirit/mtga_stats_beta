@@ -106,7 +106,7 @@ export default function NewDeck(){
                     console.log(err)
                 })
         }
-
+        event.target.name.value = "";
     }
 
     return (

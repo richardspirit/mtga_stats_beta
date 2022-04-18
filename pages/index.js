@@ -44,7 +44,10 @@ export default function Home() {
             className={styles.card}
           >
             <h2>View Decks &rarr;</h2>
-            <p>View summary of all decks.</p>
+            <p>View summary of all decks.
+              <br />
+              <br />
+            </p>
           </a>
 
           <a
@@ -59,15 +62,15 @@ export default function Home() {
             href='deckdetail'
             className={styles.card}
           >
-            <h2>Deck Details</h2>
-            <p>View deck details.</p>
+            <h2>Details/Edit Deck &rarr;</h2>
+            <p>View deck details. Edit Decks.</p>
           </a>
 
           <a
             href='winpercent'
             className={styles.card}
           >
-            <h2>Win Percent</h2>
+            <h2>Win Percent &rarr;</h2>
             <p>View win percentage of all decks.</p>
           </a>
 
@@ -75,15 +78,16 @@ export default function Home() {
             href='reports/analysis'
             className={styles.card}
           >
-            <h2>Analysis</h2>
-            <p>View analysis reports.</p>
+            <h2>Analysis &rarr;</h2>
+            <p>View analysis reports on decks and games.
+            </p>
           </a>
 
           <a
             href='favorites'
             className={styles.card}
           >
-            <h2>Favorites</h2>
+            <h2>Favorites &rarr;</h2>
             <p>View and set favorite decks from Top Ten.</p>
           </a>
 
@@ -91,7 +95,7 @@ export default function Home() {
             href='importset'
             className={styles.card}
           >
-            <h2>Import Set Data</h2>
+            <h2>Import Set Data &rarr;</h2>
             <p>Import set data for all cards.</p>
           </a>
         </div>
