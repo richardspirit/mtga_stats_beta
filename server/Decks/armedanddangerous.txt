@@ -1,0 +1,27 @@
+Deck
+3 Fireblade Charger (ZNR) 139
+2 Kitesail Cleric (ZNR) 20
+2 Kor Blademaster (ZNR) 21
+2 Beskir Shieldmate (KHM) 4
+2 Kargan Warleader (ZNR) 224
+1 Arni Brokenbrow (KHM) 120
+1 Halvar, God of Battle (KHM) 15
+2 Bruenor Battlehammer (AFR) 219
+2 Shepherd of the Cosmos (KHM) 28
+2 Akoum Warrior (ZNR) 134
+2 Resolute Strike (ZNR) 35
+1 Dancing Sword (AFR) 8
+2 Scavenged Blade (ZNR) 157
+1 Rune of Sustenance (KHM) 25
+3 Roil Eruption (ZNR) 155
+3 Dwarven Hammer (KHM) 133
+1 Maul of the Skyclaves (ZNR) 27
+1 Pigment Storm (STX) 111
+1 Axgard Armory (KHM) 250
+1 Needleverge Pathway (ZNR) 263
+4 Alpine Meadow (KHM) 248
+8 Plains (STX) 366
+10 Mountain (STX) 373
+1 Lorehold Command (STX) 199
+1 Showdown of the Skalds (KHM) 229
+1 Rune of Speed (KHM) 148

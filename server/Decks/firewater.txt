@@ -1,0 +1,38 @@
+Deck
+1 Aegar, the Freezing Flame (KHM) 200
+1 Rune of Flight (KHM) 75
+1 Run Amok (KHM) 147
+1 Invasion of the Giants (KHM) 215
+1 Frostpyre Arcanist (KHM) 58
+1 Depart the Realm (KHM) 53
+1 Craven Hulk (KHM) 127
+1 Shackles of Treachery (KHM) 150
+2 Annul (KHM) 42
+1 Cinderheart Giant (KHM) 126
+1 Immersturm Raider (KHM) 141
+1 Brinebarrow Intruder (KHM) 49
+2 Fearless Pup (KHM) 136
+1 Frostpeak Yeti (KHM) 57
+1 Disdainful Stroke (KHM) 54
+1 Tuskeri Firewalker (KHM) 157
+1 Ravenform (KHM) 72
+1 Vault Robber (KHM) 158
+1 Draugr Thought-Thief (KHM) 55
+2 Raven Wings (KHM) 243
+1 Axgard Cavalry (KHM) 121
+8 Island (KLR) 290
+9 Mountain (KLR) 298
+2 Utility Knife (ZNR) 256
+2 Traveler's Amulet (THB) 240
+2 Mirror Shield (THB) 234
+1 Crystalline Giant (IKO) 234
+2 Spare Supplies (ZNR) 254
+5 Island (GRN) 261
+5 Mountain (GRN) 263
+
+Sideboard
+2 Run Amok (KHM) 147
+1 Invasion of the Giants (KHM) 215
+1 Tormentor's Helm (KHM) 155
+1 Goldvein Pick (KHM) 239
+2 Fearless Pup (KHM) 136

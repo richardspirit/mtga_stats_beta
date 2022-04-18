@@ -1,0 +1,53 @@
+Deck
+1 Taborax, Hope's Demise (ZNR) 129
+1 Kor Celebrant (ZNR) 22
+2 Guul Draz Mucklord (ZNR) 104
+2 Farsight Adept (ZNR) 14
+1 Nimana Skydancer (ZNR) 117
+1 Smite the Monstrous (ZNR) 42
+2 Marauding Blight-Priest (ZNR) 112
+1 Dauntless Unity (ZNR) 9
+1 Sea Gate Colossus (ZNR) 251
+1 Pressure Point (ZNR) 33
+1 Plains (RNA) 260
+1 Makindi Ox (ZNR) 25
+1 Drana's Silencer (ZNR) 99
+1 Kabira Takedown (ZNR) 19
+1 Nimana Skitter-Sneak (ZNR) 116
+1 Tazeem Raptor (ZNR) 43
+1 Highborn Vampire (ZNR) 107
+1 Kabira Outrider (ZNR) 18
+1 Mind Drain (ZNR) 114
+1 Dreadwurm (ZNR) 100
+1 Prowling Felidar (ZNR) 34
+1 Subtle Strike (ZNR) 128
+1 Disenchant (ZNR) 10
+1 Skyclave Sentinel (ZNR) 253
+6 Plains (AFR) 265
+7 Swamp (AFR) 273
+2 Cliffhaven Kitesail (ZNR) 243
+1 Shadowspear (THB) 236
+2 Short Sword (M21) 236
+1 Team Pennant (STX) 260
+2 Traveler's Amulet (THB) 240
+2 Goldvein Pick (KHM) 239
+5 Swamp (GRN) 262
+5 Plains (GRN) 260
+
+Sideboard
+1 Farsight Adept (ZNR) 14
+1 Nimana Skydancer (ZNR) 117
+1 Pressure Point (ZNR) 33
+1 Oblivion's Hunger (ZNR) 119
+1 Expedition Skulker (ZNR) 101
+1 Sizzling Barrage (ZNR) 162
+1 Tormenting Voice (ZNR) 172
+1 Smite the Monstrous (ZNR) 42
+1 Drana's Silencer (ZNR) 99
+1 Springmantle Cleric (ZNR) 205
+1 Broken Wings (ZNR) 181
+1 Cascade Seer (ZNR) 48
+1 Scale the Heights (ZNR) 202
+1 Turntimber Ascetic (ZNR) 214
+1 Murasa Brute (ZNR) 195
+1 Tajuru Snarecaster (ZNR) 210

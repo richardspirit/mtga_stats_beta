@@ -1,0 +1,45 @@
+Deck
+9 Island (STX) 369
+1 Glimpse the Cosmos (KHM) 60
+1 Brinebarrow Intruder (KHM) 49
+1 Annul (KHM) 42
+1 Augury Raven (KHM) 44
+1 Rune of Flight (KHM) 75
+9 Mountain (STX) 373
+1 Vortex Runner (STX) 60
+1 Tome Shredder (STX) 117
+1 Serpentine Curve (STX) 52
+1 Twinscroll Shaman (STX) 118
+1 Spectacle Mage (STX) 235
+1 Oggyar Battle-Seer (STX) 209
+1 Saw It Coming (KHM) 76
+1 Prismari Pledgemage (STX) 215
+1 Giant's Amulet (KHM) 59
+1 Cosima, God of the Voyage (KHM) 50
+1 Mists of Littjara (KHM) 67
+1 Teach by Example (STX) 241
+1 Disdainful Stroke (KHM) 54
+1 Depart the Realm (KHM) 53
+1 Frost Augur (KHM) 56
+1 Expanded Anatomy (STX) 2
+1 Cosmos Charger (KHM) 51
+1 Inga Rune-Eyes (KHM) 64
+1 Run Ashore (KHM) 74
+1 Surtland Frostpyre (KHM) 271
+1 Invasion of the Giants (KHM) 215
+1 Aegar, the Freezing Flame (KHM) 200
+1 Port of Karfell (KHM) 265
+1 Fearless Liberator (KHM) 135
+1 Frost Bite (KHM) 138
+1 Tormentor's Helm (KHM) 155
+1 Axgard Cavalry (KHM) 121
+1 Run Amok (KHM) 147
+1 Rune of Speed (KHM) 148
+1 Dual Strike (KHM) 132
+1 Seize the Spoils (KHM) 149
+1 Arni Brokenbrow (KHM) 120
+1 Breakneck Berserker (KHM) 124
+1 Tundra Fumarole (KHM) 156
+1 Crush the Weak (KHM) 128
+1 Demon Bolt (KHM) 129
+1 Cinderheart Giant (KHM) 126

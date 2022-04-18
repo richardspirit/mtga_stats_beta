@@ -1,9 +1,12 @@
 import Link from "next/link";
+import {useFilePicker} from 'use-file-picker';
+import { useState } from "react";
 import styles from '../styles/Home.module.css'
 let endpoint = "http://localhost:8080";
 
 export default function NewDeck(){
     const url = endpoint + "/api/newdeck";
+    const [textInputName, setTextInputName] = useState('');
 
     const createDeck = async event => {
         event.preventDefault();
@@ -51,6 +54,61 @@ export default function NewDeck(){
             event.target.num_art.value = "0";
     }
 
+    const urlImport = endpoint + "/api/importdeck"
+    const [openFileSelector, {filesContent, errors, loading, plainFiles}] = useFilePicker({
+        multiple: false,
+        accept: ['.txt']
+    });
+
+    if (errors.length > 0) return <p>Error!</p>;
+
+    if (loading){
+        return <div>Loading...</div>
+    }
+
+    let fileName = JSON.stringify(plainFiles);
+    let fn = ''
+
+    for (let i = 0;i<fileName.length;i++){
+        if (i>9){
+            if (fileName[i] === `"`){
+                break
+            } else {
+                fn = fn + fileName[i];   
+            }            
+        }
+    }
+
+    const checkTextInput = () => {
+        if (!textInputName.trim()){
+            alert("Name Required");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    const handleClick = async event => {
+        event.preventDefault();
+        if (checkTextInput()){
+            const importDeck = textInputName + '_' + fn;
+            const res  = fetch(urlImport, {
+                body: JSON.stringify(importDeck),
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                method: "POST"
+                })
+                .catch(err => {
+                    if (err){
+                        alert(err)
+                    }
+                    console.log(err)
+                })
+        }
+
+    }
+
     return (
         <>
         <main className={styles.main} style={{background: 'black', opacity: '90%', backgroundImage: `url("./lightning.jpg")`}}>
@@ -61,7 +119,7 @@ export default function NewDeck(){
                 <div className={styles.newdeck}>
                     <label htmlFor="name">
                         <span> Deck Name </span>
-                        <input id="name" type="text" required />
+                        <input id="name" type="text" onChange={(e)=>setTextInputName(e.target.value)} required />
                     </label>
 
                     <label htmlFor="colors">
@@ -108,6 +166,8 @@ export default function NewDeck(){
                 </div>
                 <div style={{textAlign: 'center', paddingBottom: '10px'}}>
                     <button type="submit">Submit</button>
+                    <button onClick={() => openFileSelector()}>Get File</button>
+                    <button onClick={handleClick}>File Submit</button>
                 </div>
             </form>
             <Link href="/">

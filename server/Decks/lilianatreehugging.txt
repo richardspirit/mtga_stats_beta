@@ -1,0 +1,52 @@
+Deck
+1 Liliana, Waker of the Dead (M21) 108
+1 Liliana's Standard Bearer (M21) 110
+1 Liliana's Elite (JMP) 250
+1 Settle the Score (JMP) 276
+1 Goremand (M21) 101
+1 Liliana's Devotee (M21) 109
+1 Rise Again (M21) 119
+1 Blighted Bat (JMP) 205
+1 Cemetery Recruitment (JMP) 217
+1 Ghoulraiser (JMP) 238
+1 Thriving Moor (JMP) 37
+1 Wailing Ghoul (JMP) 286
+1 Liliana's Steward (M21) 111
+11 Swamp (M21) 311
+1 Primordial Sage (JMP) 422
+1 Burlfist Oak (M21) 174
+1 Warden of the Woods (M21) 213
+1 Nature's Way (JMP) 412
+1 Wall of Blossoms (JMP) 442
+1 Llanowar Visionary (M21) 193
+1 Snarespinner (M21) 207
+1 Ambassador Oak (JMP) 375
+1 Crushing Canopy (JMP) 386
+1 Explore (JMP) 393
+1 Thriving Grove (JMP) 34
+1 Wildsize (JMP) 445
+1 Gnarled Sage (M21) 187
+11 Forest (JMP) 70
+1 Archfiend's Vessel (M21) 88
+1 Disfigure (M20) 95
+1 Dead Weight (IKO) 83
+1 Duskwielder (KHM) 91
+1 Knight of the Ebon Legion (M20) 105
+1 Raise Dead (ANB) 56
+1 Typhoid Rats (ANB) 63
+1 Vampire of the Dire Moon (M20) 120
+1 Arrogant Poet (STX) 63
+1 Child of Night (GRN) 65
+1 Discordant Piper (THB) 88
+1 Giant Growth (WAR) 162
+1 Jungle Delver (ANB) 99
+1 Moss Viper (THB) 179
+1 Tajuru Blightblade (ZNR) 208
+1 Vastwood Fortification (ZNR) 216
+1 Snakeskin Veil (KHM) 194
+1 Big Play (STX) 122
+1 Feral Roar (ANB) 94
+1 Fynn, the Fangbearer (KHM) 170
+1 Greenwood Sentinel (M20) 174
+3 Forest (GRN) 264
+3 Swamp (GRN) 262

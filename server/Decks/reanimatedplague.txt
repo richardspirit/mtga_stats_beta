@@ -1,0 +1,38 @@
+Deck
+1 Baffling Defenses (J21) 2
+1 Nullpriest of Oblivion (ZNR) 118
+1 Young Necromancer (MH2) 110
+1 Archfiend of Sorrows (MH2) 74
+1 Priest of Fell Rites (MH2) 208
+1 Unbreakable Bond (IKO) 101
+1 Breathless Knight (MH2) 187
+1 Void Beckoner (IKO) 104
+1 Miasmic Mummy (JMP) 256
+1 Bone Shards (MH2) 76
+1 Yoked Plowbeast (J21) 30
+1 Shambling Goblin (JMP) 277
+1 Plaguecrafter's Familiar (J21) 18
+1 Deathbloom Thallid (DAR) 84
+1 Manor Guardian (J21) 17
+1 Plaguecrafter (GRN) 82
+1 Boneyard Aberration (J21) 14
+1 Blitz Leech (IKO) 74
+1 Kraul Swarm (GRN) 73
+1 Ob Nixilis's Cruelty (WAR) 101
+1 Yawgmoth, Thran Physician (MH1) 116
+1 Davriel's Withering (J21) 16
+1 Barren Moor (ONS) 312
+1 Secluded Steppe (ONS) 324
+2 Scoured Barrens (M20) 251
+8 Swamp (AFR) 270
+6 Plains (AFR) 265
+2 Candletrap (MID) 9
+2 Fight as One (IKO) 12
+2 Guiding Voice (STX) 19
+2 Light of Hope (IKO) 20
+2 Paladin Class (AFR) 29
+2 Tactical Advantage (ANB) 22
+2 All That Glitters (ELD) 2
+2 Hallowed Priest (ANB) 9
+2 Impassioned Orator (RNA) 12
+2 Power Word Kill (AFR) 114
