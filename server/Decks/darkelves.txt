@@ -1,0 +1,30 @@
+Deck
+1 Binding the Old Gods (KHM) 206
+2 Elderfang Disciple (KHM) 93
+1 Vengeful Reaper (KHM) 116
+1 Grizzled Outrider (KHM) 173
+1 Dogged Pursuit (KHM) 85
+1 Withercrown (KHM) 119
+1 Scorn Effigy (KHM) 246
+1 Old-Growth Troll (KHM) 185
+1 Darkbore Pathway (KHM) 254
+2 Duskwielder (KHM) 91
+1 Arachnoform (KHM) 159
+1 Fynn, the Fangbearer (KHM) 170
+1 Gnottvold Recluse (KHM) 172
+3 Jaspera Sentinel (KHM) 178
+1 Broken Wings (KHM) 164
+2 Deathknell Berserker (KHM) 83
+2 Elvish Warmaster (KHM) 167
+2 Koma's Faithful (KHM) 102
+1 Infernal Pet (KHM) 99
+1 Karfell Kennel-Master (KHM) 101
+12 Forest (KLR) 300
+11 Swamp (KLR) 293
+1 Skemfar Avenger (KHM) 109
+1 Skemfar Shadowsage (KHM) 110
+2 Tajuru Blightblade (ZNR) 208
+1 Greenwood Sentinel (M20) 174
+1 Tajuru Paragon (ZNR) 209
+2 Ram Through (IKO) 170
+2 Elderleaf Mentor (KHM) 165

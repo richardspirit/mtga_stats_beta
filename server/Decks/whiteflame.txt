@@ -1,0 +1,50 @@
+Deck
+1 Akiri, Fearless Voyager (ZNR) 220
+1 Sneaking Guide (ZNR) 164
+2 Scavenged Blade (ZNR) 157
+1 Cliffhaven Sell-Sword (ZNR) 8
+1 Ardent Electromancer (ZNR) 135
+2 Tormenting Voice (ZNR) 172
+1 Cliffhaven Kitesail (ZNR) 243
+1 Paired Tactician (ZNR) 31
+1 Expedition Healer (ZNR) 13
+1 Grotag Bug-Catcher (ZNR) 142
+1 Spitfire Lagac (ZNR) 167
+1 Kabira Outrider (ZNR) 18
+2 Disenchant (ZNR) 10
+1 Sizzling Barrage (ZNR) 162
+1 Kor Celebrant (ZNR) 22
+1 Cinderclasm (ZNR) 136
+2 Practiced Tactics (ZNR) 32
+1 Pressure Point (ZNR) 33
+2 Cleansing Wildfire (ZNR) 137
+1 Canyon Jerboa (ZNR) 7
+1 Allied Assault (ZNR) 1
+10 Mountain (AFR) 277
+10 Plains (AFR) 265
+1 Cleric Class (AFR) 6
+2 Usher of the Fallen (KHM) 35
+3 All That Glitters (ELD) 2
+2 Barbarian Class (AFR) 131
+1 Bonecrusher Giant (ELD) 115
+1 Breakneck Berserker (KHM) 124
+2 Hulking Bugbear (AFR) 149
+1 Zariel, Archduke of Avernus (AFR) 172
+1 Elspeth Conquers Death (THB) 13
+
+Sideboard
+1 Mesa Lynx (ZNR) 28
+1 Shell Shield (ZNR) 79
+1 Cleric of Chill Depths (ZNR) 51
+1 Spare Supplies (ZNR) 254
+1 Dauntless Unity (ZNR) 9
+1 Oblivion's Hunger (ZNR) 119
+1 Reclaim the Wastes (ZNR) 200
+1 Farsight Adept (ZNR) 14
+1 Marauding Blight-Priest (ZNR) 112
+2 Turntimber Ascetic (ZNR) 214
+1 Ardent Electromancer (ZNR) 135
+1 Highborn Vampire (ZNR) 107
+1 Scale the Heights (ZNR) 202
+1 Skyclave Sentinel (ZNR) 253
+1 Nissa's Zendikon (ZNR) 197

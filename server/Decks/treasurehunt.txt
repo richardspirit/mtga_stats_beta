@@ -1,0 +1,25 @@
+Deck
+10 Mountain (STX) 373
+3 Skullport Merchant (AFR) 120
+1 Soul Shatter (ZNR) 127
+1 Westgate Regent (AFR) 126
+2 Hoarding Ogre (AFR) 146
+4 Sulfurous Mire (KHM) 270
+3 Dragon's Fire (AFR) 139
+2 Magic Missile (AFR) 154
+1 Xorn (AFR) 167
+3 Kalain, Reclusive Painter (AFR) 225
+1 Orcus, Prince of Undeath (AFR) 229
+1 Immersturm Predator (KHM) 214
+1 Blightstep Pathway (KHM) 252
+9 Swamp (STX) 371
+1 Goldspan Dragon (KHM) 139
+2 Jaded Sell-Sword (AFR) 152
+1 Red Dragon (AFR) 160
+3 Hired Hexblade (AFR) 109
+3 Shambling Ghast (AFR) 119
+2 Sudden Breakthrough (STX) 116
+1 Thieves' Tools (AFR) 122
+2 Grim Bounty (AFR) 106
+2 Deadly Dispute (AFR) 94
+1 Unwilling Ingredient (STX) 90

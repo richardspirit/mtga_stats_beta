@@ -1,0 +1,54 @@
+Deck
+1 Dueling Rapier (AFR) 140
+3 Shambling Ghast (AFR) 119
+1 Vampire Spawn (AFR) 123
+1 Plundering Barbarian (AFR) 158
+1 Brazen Dwarf (AFR) 134
+1 Sepulcher Ghoul (AFR) 118
+1 Price of Loyalty (AFR) 159
+1 Deadly Dispute (AFR) 94
+1 Critical Hit (AFR) 137
+1 Yuan-Ti Fang-Blade (AFR) 128
+1 Precipitous Drop (AFR) 115
+1 Ray of Enfeeblement (AFR) 116
+1 Armory Veteran (AFR) 130
+1 You Come to the Gnoll Camp (AFR) 168
+1 Demogorgon's Clutches (AFR) 96
+1 Baleful Beholder (AFR) 89
+1 Zariel, Archduke of Avernus (AFR) 172
+1 Warlock Class (AFR) 125
+1 Grim Wanderer (AFR) 107
+2 Kick in the Door (AFR) 153
+1 Hobgoblin Captain (AFR) 148
+1 Magic Missile (AFR) 154
+1 Boots of Speed (AFR) 133
+12 Mountain (AFR) 277
+12 Swamp (AFR) 273
+1 Clattering Skeletons (AFR) 93
+1 Draugr Recruiter (KHM) 87
+1 Eradicator Valkyrie (KHM) 94
+1 Feed the Serpent (KHM) 95
+1 Drider (AFR) 98
+1 Mascot Interception (STX) 110
+1 Scorch Rider (ZNR) 158
+1 Rockslide Sorcerer (ZNR) 154
+1 Tectonic Giant (THB) 158
+1 Terror of the Peaks (M21) 164
+1 Kroxa, Titan of Death's Hunger (THB) 221
+1 Kardur's Vicious Return (KHM) 217
+1 Ravager's Mace (ZNR) 235
+
+Sideboard
+1 Fifty Feet of Rope (AFR) 244
+1 Greataxe (AFR) 245
+1 Spare Dagger (AFR) 250
+1 Mimic (AFR) 249
+1 You Come to the Gnoll Camp (AFR) 168
+1 Bar the Gate (AFR) 47
+1 Leather Armor (AFR) 248
+2 Plundering Barbarian (AFR) 158
+1 Earth-Cult Elemental (AFR) 141
+2 Price of Loyalty (AFR) 159
+2 Clever Conjurer (AFR) 51
+1 Unexpected Windfall (AFR) 164
+1 Arborea Pegasus (AFR) 2

@@ -1,0 +1,50 @@
+Deck
+1 Grim Bounty (AFR) 106
+1 Grim Wanderer (AFR) 107
+1 Expanded Anatomy (STX) 2
+2 Vampire Spawn (AFR) 123
+1 Shambling Ghast (AFR) 119
+3 Devour Intellect (AFR) 97
+1 Dungeon Map (AFR) 242
+1 Skullport Merchant (AFR) 120
+3 Feign Death (AFR) 103
+1 Hired Hexblade (AFR) 109
+1 Fates' Reversal (AFR) 102
+2 Dungeon Crawler (AFR) 99
+1 Zombie Ogre (AFR) 129
+2 Mimic (AFR) 249
+2 Greataxe (AFR) 245
+1 Hoard Robber (AFR) 110
+1 Herald of Hadar (AFR) 108
+2 Clattering Skeletons (AFR) 93
+1 Demogorgon's Clutches (AFR) 96
+20 Swamp (AFR) 273
+1 Baleful Beholder (AFR) 89
+1 Bake into a Pie (ELD) 76
+1 Eradicator Valkyrie (KHM) 94
+1 Nightmare Shepherd (THB) 108
+1 Drider (AFR) 98
+1 Rise from the Grave (ANA) 31
+1 Soulhunter Rakshasa (ANB) 62
+1 Massacre Wurm (M21) 114
+1 Cliffhaven Kitesail (ZNR) 243
+1 Shadowspear (THB) 236
+1 Team Pennant (STX) 260
+1 Relic Golem (ZNR) 249
+
+Sideboard
+1 Devour Intellect (AFR) 97
+1 Feign Death (AFR) 103
+1 Scaled Herbalist (AFR) 204
+1 Dragon's Disciple (AFR) 13
+1 Barbarian Class (AFR) 131
+1 Mordenkainen's Polymorph (AFR) 65
+1 You Come to the Gnoll Camp (AFR) 168
+1 Vampire Spawn (AFR) 123
+1 Manticore (AFR) 113
+2 Earth-Cult Elemental (AFR) 141
+1 Plundering Barbarian (AFR) 158
+1 Bar the Gate (AFR) 47
+1 Zombie Ogre (AFR) 129
+1 Contact Other Plane (AFR) 52
+1 You Find the Villains' Lair (AFR) 84

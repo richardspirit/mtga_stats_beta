@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"bufio"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -150,6 +151,15 @@ func ImportSet(w http.ResponseWriter, r *http.Request) {
 	var file string
 	_ = json.NewDecoder(r.Body).Decode(&file)
 	error := importSet(file)
+	json.NewEncoder(w).Encode(error)
+}
+
+func ImportDeck(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Context-Type", "application/x-www-urlencoded")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	var fileDeck string
+	_ = json.NewDecoder(r.Body).Decode(&fileDeck)
+	error := importDeck(fileDeck)
 	json.NewEncoder(w).Encode(error)
 }
 
@@ -943,5 +953,140 @@ func importSet(fileName string) error {
 		}
 		trows = trows + int(rows)
 	}
+	return nil
+}
+
+func importDeck(fileDeck string) error {
+	// Open up our database connection.
+	db := processing.Opendb()
+	// defer the close till after the main function has finished
+	// executing
+	defer db.Close()
+
+	s := strings.Split(fileDeck, "_")
+	fileName := s[1]
+
+	dir, _ := os.UserHomeDir()
+	dirFile := (dir + `\react_mtga\mtga_stats_beta\mtga_stats\server\Decks\` + fileName)
+
+	file, err := os.Open(dirFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+
+	//variables
+	var (
+		side string
+		d    models.Deck
+	)
+	d.Name = s[0]
+	for scanner.Scan() {
+		var (
+			deck     string
+			numcopy  int
+			name     string
+			set      string
+			snumcopy string
+			snum     string
+			num      int
+		)
+		deck = d.Name
+		line := scanner.Text()
+
+		if line != "Deck" && line != "Sideboard" {
+			for _, lnslce := range line {
+				_, err := strconv.Atoi(string(lnslce))
+				if err == nil {
+					if numcopy == 0 {
+						numcopy, _ = strconv.Atoi(string(lnslce))
+						snumcopy = string(lnslce)
+					} else if numcopy != 0 && name == "" {
+						snumcopy = snumcopy + string(lnslce)
+					} else if numcopy != 0 && name != "" && set != "" && set[len(set)-2:] != ") " {
+						set = set + string(lnslce)
+					} else if num == 0 && name != "" && set != "" {
+						num, _ = strconv.Atoi(string(lnslce))
+						snum = string(lnslce)
+					} else if num != 0 {
+						snum = snum + string(lnslce)
+					}
+				} else {
+					sname := string(lnslce)
+					if sname != "(" && set == "" {
+						name = name + string(lnslce)
+					} else if sname == "(" || set != "" {
+						set = set + string(lnslce)
+					}
+
+				}
+			}
+			numcopy, _ = strconv.Atoi(snumcopy)
+			num, _ = strconv.Atoi(snum)
+			set = strings.TrimSpace(set)
+			set = strings.TrimLeft(strings.TrimRight(set, ")"), "(")
+			name = strings.TrimSpace(name)
+			if numcopy == 0 && num == 0 {
+				continue
+			}
+			// perform a db.Query insert
+			query := "INSERT INTO mtga_test.cards(deck, numcopy, cardname, `set`, setnum, side_board) VALUES (?, ?, ?, ?, ?, ?)"
+			ctx, cancelfunc := context.WithTimeout(context.Background(), 5*time.Second)
+			defer cancelfunc()
+			stmt, err := db.PrepareContext(ctx, query)
+			if err != nil {
+				log.Printf("Error %s when preparing SQL statement", err)
+				panic(err.Error())
+			}
+			defer stmt.Close()
+			res, err := stmt.ExecContext(ctx, deck, numcopy, name, set, num, side)
+			if err != nil {
+				log.Printf("Error %s when inserting row into card table", err)
+				panic(err.Error())
+			}
+			rows, err := res.RowsAffected()
+			if err != nil {
+				log.Printf("Error %s when finding rows affected", err)
+				panic(err.Error())
+			}
+			log.Printf("%d row inserted: ", rows)
+		} else if line == "Sideboard" {
+			side = "y"
+		}
+	}
+	results := db.QueryRow("SELECT SUM(numcopy) FROM mtga_test.cards WHERE side_board <> 'y' AND deck=?", d.Name)
+	err = results.Scan(&d.Num_Cards)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	results = db.QueryRow("SELECT SUM(numcopy) FROM mtga_test.cards WHERE side_board <> 'y' AND cardname IN (SELECT DISTINCT SUBSTRING_INDEX(card_name,'/',1)  FROM mtga.sets WHERE types = 'Land' AND card_side IN ('a','')) AND deck=?", d.Name)
+	err = results.Scan(&d.Num_Lands)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	results = db.QueryRow("SELECT SUM(numcopy) FROM mtga_test.cards WHERE side_board <> 'y' AND cardname IN (SELECT DISTINCT SUBSTRING_INDEX(card_name,'/',1) FROM mtga.sets WHERE types = 'Creature' AND card_side IN ('a','')) AND deck=?", d.Name)
+	err = results.Scan(&d.Num_Creat)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	results = db.QueryRow("SELECT SUM(numcopy) FROM mtga_test.cards WHERE side_board <> 'y' AND cardname IN (SELECT DISTINCT SUBSTRING_INDEX(card_name,'/',1)  FROM mtga.`sets` WHERE types NOT IN ('Creature','Land') AND card_side IN ('a','')) AND deck=?", d.Name)
+	err = results.Scan(&d.Num_Spells)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	d.Date_Entered = time.Now()
+	d.Disable = 1
+	newDeck(d)
+	/* 	if s == "n" {
+	   		newdeck(d)
+	   	} else if s == "y" {
+	   		updatedeck(d, d.Name)
+	   	} */
 	return nil
 }

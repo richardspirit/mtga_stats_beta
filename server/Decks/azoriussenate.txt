@@ -1,0 +1,26 @@
+Deck
+2 Arrester's Admonition (RNA) 31
+2 Azorius Knight-Arbiter (RNA) 154
+2 Azorius Skyguard (RNA) 155
+2 Depose // Deploy (RNA) 225
+1 Deputy of Detention (RNA) 165
+2 Dovin's Acuity (RNA) 168
+3 Lawmage's Binding (RNA) 190
+1 Precognitive Perception (RNA) 45
+2 Senate Guildmage (RNA) 204
+2 Sphinx of New Prahv (RNA) 208
+2 Sphinx's Insight (RNA) 209
+2 Summary Judgment (RNA) 24
+1 Time Wipe (WAR) 223
+1 Warrant // Warden (RNA) 230
+1 Angel of Grace (RNA) 1
+1 Unbreakable Formation (RNA) 29
+2 Elite Guardmage (WAR) 195
+2 Senate Griffin (RNA) 219
+4 Azorius Guildgate (RNA) 243
+1 Hallowed Fountain (RNA) 251
+10 Island (RNA) 261
+10 Plains (RNA) 260
+2 Ajani's Pridemate (WAR) 4
+1 Raise the Alarm (M20) 34
+1 Empyrean Eagle (M20) 208

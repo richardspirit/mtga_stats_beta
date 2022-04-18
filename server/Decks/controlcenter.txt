@@ -1,0 +1,25 @@
+Deck
+3 Tazeem Roilmage (ZNR) 84
+3 Elderfang Disciple (KHM) 93
+1 Dragon Turtle (AFR) 56
+1 Callous Bloodmage (STX) 66
+2 Vampire Spawn (AFR) 123
+1 Gelatinous Cube (AFR) 105
+1 Mind Flayer (AFR) 63
+1 Blue Dragon (AFR) 49
+1 Iymrith, Desert Doom (AFR) 62
+1 Black Dragon (AFR) 90
+2 Reject (STX) 50
+2 Curate (STX) 40
+3 Flunk (STX) 71
+2 You Find the Villains' Lair (AFR) 84
+2 Contact Other Plane (AFR) 52
+1 Baleful Mastery (STX) 64
+1 Clearwater Pathway (ZNR) 260
+4 Ice Tunnel (KHM) 262
+10 Island (STX) 369
+10 Swamp (STX) 370
+3 Poison the Cup (KHM) 103
+3 Skull Raid (KHM) 111
+1 Undersea Invader (KHM) 78
+1 Port of Karfell (KHM) 265
