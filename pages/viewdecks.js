@@ -87,7 +87,7 @@ export default function ViewDecks() {
             <RankQuery columns={columns} data={data}/>
             </div>
             <Link href="/">
-                <a>Back Home</a>
+                <a style={{color: 'white'}}>Back Home</a>
             </Link>
             </main>
         </>

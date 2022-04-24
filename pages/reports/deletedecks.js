@@ -63,10 +63,15 @@ export default function DeleteDecks() {
             <Container style={{ marginTop: 100 }}>
                 <TableContainer columns={columns} data={data} />
             </Container>
-            <Link href="/">
-                <a>Back Home</a>
-            </Link>
             </main>
+            <footer className={styles.footer}>
+                <Link href="analysis">
+                    <a>Back</a>
+                </Link>
+                <Link href="/">
+                    <a>Home</a>
+                </Link>
+            </footer>
         </div>
         </>
     );
