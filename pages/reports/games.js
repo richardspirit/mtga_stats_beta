@@ -239,10 +239,15 @@ export default function Games() {
                 />
             </div>
             <ResultQuery columns={column} data={analyData}/>
-            <Link href="/">
-                <a>Back Home</a>
-            </Link>
             </main>
+            <footer className={styles.footer}>
+                <Link href="gamemenu">
+                    <a>Back</a>
+                </Link>
+                <Link href="/">
+                    <a>Home</a>
+                </Link>
+            </footer>
         </div>
         </>
     );

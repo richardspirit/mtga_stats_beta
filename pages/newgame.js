@@ -169,7 +169,7 @@ export default function NewGame() {
                     
                     <label htmlFor="oppname" className={styles.newgame}>
                         <span>Opponent Name </span>
-                        <input id="oppname" type="text" />
+                        <input id="oppname" type="text" required />
                     </label>
                 <div className={styles.newgame}>
                     <label htmlFor="gamelvl">
