@@ -105,8 +105,8 @@ export default function NewDeck(){
                     }
                     console.log(err)
                 })
+                setTextInputName('');
         }
-        event.target.name.value = "";
     }
 
     return (
@@ -119,7 +119,7 @@ export default function NewDeck(){
                 <div className={styles.newdeck}>
                     <label htmlFor="name">
                         <span> Deck Name </span>
-                        <input id="name" type="text" onChange={(e)=>setTextInputName(e.target.value)} required />
+                        <input id="name" type="text" onChange={(e)=>setTextInputName(e.target.value)} value={textInputName} required />
                     </label>
 
                     <label htmlFor="colors">

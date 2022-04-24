@@ -979,8 +979,9 @@ func importDeck(fileDeck string) error {
 
 	//variables
 	var (
-		side string
-		d    models.Deck
+		side   string
+		d      models.Deck
+		colors string
 	)
 	d.Name = s[0]
 	for scanner.Scan() {
@@ -1056,6 +1057,116 @@ func importDeck(fileDeck string) error {
 			side = "y"
 		}
 	}
+	color_results, err := db.Query(`
+		select distinct
+			case
+				when length(s.colors) = 1 then 
+					case
+						when s.colors = 'U' then 'Blue'
+						when s.colors = 'R' then 'Red'
+						when s.colors = 'B' then 'Black'
+						when s.colors = 'G' then 'Green'
+						when s.colors = 'W' then 'White'
+					end
+				when length(s.colors) = 2 then
+					case 
+						when s.colors in ('BG', 'GB') then 'Black, Green'
+						when s.colors in ('BR', 'RB') then 'Black, Red'
+						when s.colors in ('BU' ,'UB') then 'Black, Blue'
+						when s.colors in ('BW' ,'WB') then 'Black, White'
+						when s.colors in ('RU' ,'UR') then 'Red, Blue'
+						when s.colors in ('RG' ,'GR') then 'Red, Green'
+						when s.colors in ('RW' ,'WR') then 'Red, White'
+						when s.colors in ('UG' ,'GU') then 'Blue, Green'
+						when s.colors in ('UW' ,'WU') then 'Blue, White'
+						when s.colors in ('GW' ,'WG') then 'Green, White'
+					end
+				when length(s.colors) = 3 then
+					case 
+						when s.colors in ('BGR', 'BRG', 'GRB', 'GBR', 'RBG', 'RGB') then 'Black, Red, Green'
+						when s.colors in ('BUR', 'BRU', 'URB', 'UBR', 'RBU', 'RUB') then 'Black, Red, Blue'
+						when s.colors in ('BWR', 'BRW', 'WRB', 'WBR', 'RBG', 'RGB') then 'Black, Red, White'
+						when s.colors in ('BGU', 'BUG', 'GUB', 'GBU', 'UBG', 'UGB') then 'Black, Green, Blue'
+						when s.colors in ('BGW', 'BWG', 'GWB', 'GBW', 'WBG', 'WGB') then 'Black, Green, White'
+						when s.colors in ('BWU', 'BUW', 'WUB', 'WBU', 'UBW', 'UWB') then 'Black, Blue, White'
+						when s.colors in ('RGU', 'RUG', 'GUR', 'GRU', 'URG', 'UGR') then 'Red, Green, Blue'
+						when s.colors in ('RGW', 'RWG', 'GWR', 'GRW', 'WRG', 'WGR') then 'Red, Green, White'
+						when s.colors in ('RGU', 'RUG', 'GUR', 'GRU', 'URG', 'UGR') then 'Red, Blue, White'
+						when s.colors in ('WGU', 'WUG', 'GUW', 'GWU', 'UWG', 'UGW') then 'White, Green, Blue'
+					end
+				when length(s.colors) = 4 then
+					case 
+						when s.colors in ('BGWR', 'BGRW', 'BWGR', 'BWRG', 'BRWG', 'BRGW', 'GRWB', 'GRBW', 'GBWR', 'GBRW', 'GWBR', 'GWRB', 'RWBG', 'RWGB', 'RBWG', 'RBGW', 'RGBW', 'RGWB') then 'Black, Red, White, Green'
+						when s.colors in ('BUWR', 'BURW', 'BWUR', 'BWRU', 'BRWU', 'BRUW', 'URWB', 'URBW', 'UBWR', 'UBRW', 'UWBR', 'UWRB', 'RWBU', 'RWUB', 'RBWU', 'RBUW', 'RUBW', 'RUWB') then 'Black, Red, White, Blue'
+						when s.colors in ('BGUR', 'BGRU', 'BUGR', 'BURG', 'BRUG', 'BRGU', 'GRUB', 'GRBU', 'GBUR', 'GBRU', 'GUBR', 'GURB', 'RUBG', 'RUGB', 'RBUG', 'RBGU', 'RGBU', 'RGUB') then 'Black, Red, Blue, Green'
+						when s.colors in ('BGWU', 'BGUW', 'BWGU', 'BWUG', 'BUWG', 'BUGW', 'GUWB', 'GUBW', 'GBWU', 'GBUW', 'GWBU', 'GWUB', 'UWBG', 'UWGB', 'UBWG', 'UBGW', 'UGBW', 'UGWB') then 'Black, Blue, White, Green'
+						when s.colors in ('UGWR', 'UGRW', 'UWGR', 'UWRG', 'URWG', 'URGW', 'GRWU', 'GRUW', 'GUWR', 'GURW', 'GWUR', 'GWRU', 'RWUG', 'RWGU', 'RUWG', 'RUGW', 'RGUW', 'RGWU') then 'Blue, Red, White, Green'
+					end
+				else 'Black, White, Red, Blue, Green' 
+			end as Colors
+		from sets s 
+			join cards c 
+				on s.card_name = c.cardname 
+		where length(s.colors) <> 0 AND c.deck=?`, d.Name)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	for color_results.Next() {
+		//get colors
+		err = color_results.Scan(&colors)
+		println(colors)
+		if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+		}
+		if strings.Contains(colors, "Black") {
+			if !strings.Contains(d.Colors, "Black") {
+				if len(d.Colors) < 1 {
+					d.Colors = "Black"
+				} else {
+					d.Colors += ", Black"
+				}
+			}
+		}
+		if strings.Contains(colors, "White") {
+			if !strings.Contains(d.Colors, "White") {
+				if len(d.Colors) < 1 {
+					d.Colors = "White"
+				} else {
+					d.Colors += ", White"
+				}
+			}
+		}
+		if strings.Contains(colors, "Blue") {
+			if !strings.Contains(d.Colors, "Blue") {
+				if len(d.Colors) != 0 {
+					d.Colors = "Blue"
+				} else {
+					d.Colors += ", Blue"
+				}
+			}
+		}
+		if strings.Contains(colors, "Green") {
+			if !strings.Contains(d.Colors, "Green") {
+				if len(d.Colors) < 1 {
+					d.Colors = "Green"
+				} else {
+					d.Colors += ", Green"
+				}
+			}
+		}
+		if strings.Contains(colors, "Red") {
+			if !strings.Contains(d.Colors, "Red") {
+				if len(d.Colors) != 0 {
+					d.Colors = "Red"
+				} else {
+					d.Colors += ", Red"
+				}
+			}
+		}
+
+	}
+
 	results := db.QueryRow("SELECT SUM(numcopy) FROM mtga_test.cards WHERE side_board <> 'y' AND deck=?", d.Name)
 	err = results.Scan(&d.Num_Cards)
 	if err != nil {
@@ -1083,10 +1194,5 @@ func importDeck(fileDeck string) error {
 	d.Date_Entered = time.Now()
 	d.Disable = 1
 	newDeck(d)
-	/* 	if s == "n" {
-	   		newdeck(d)
-	   	} else if s == "y" {
-	   		updatedeck(d, d.Name)
-	   	} */
 	return nil
 }
