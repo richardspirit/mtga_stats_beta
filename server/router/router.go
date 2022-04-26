@@ -30,5 +30,6 @@ func Router() *mux.Router {
 	router.HandleFunc("/api/importset", middleware.ImportSet).Methods("POST", "OPTIONS")
 	router.HandleFunc("/api/importdeck", middleware.ImportDeck).Methods("POST", "OPTIONS")
 	router.HandleFunc("/api/updatedeck", middleware.UpdateDeck).Methods("POST", "OPTIONS")
+	router.HandleFunc("/api/deletedeck", middleware.DeleteDeck).Methods("POST", "OPTIONS")
 	return router
 }
