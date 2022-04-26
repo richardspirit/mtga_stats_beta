@@ -9,7 +9,7 @@ export default function NewDeck(){
     const [textInputName, setTextInputName] = useState('');
 
     const createDeck = async event => {
-        event.preventDefault();
+        //event.preventDefault();
         let fav
         if (event.target.favorite.value === "Yes"){
             fav = 0;
@@ -22,12 +22,12 @@ export default function NewDeck(){
                 name: event.target.name.value,
                 colors: event.target.colors.value,
                 favorite: fav,
-                num_cards: event.target.num_cards.value,
-                num_spells: event.target.num_spells.value,
-                num_creat: event.target.num_creat.value,
-                num_lands: event.target.num_lands.value,
-                num_enchant: event.target.num_enchant.value,
-                num_art: event.target.num_art.value
+                num_cards: parseInt(event.target.num_cards.value,10),
+                num_spells: parseInt(event.target.num_spells.value,10),
+                num_creat: parseInt(event.target.num_creat.value,10),
+                num_lands: parseInt(event.target.num_lands.value,10),
+                num_enchant: parseInt(event.target.num_enchant.value,10),
+                num_art: parseInt(event.target.num_art.value,10)
             }),
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
@@ -40,18 +40,6 @@ export default function NewDeck(){
                 }
                 //console.log(err)
             })
-
-            //const result = await res.json();
-
-            event.target.name.value = "";
-            event.target.colors.value = "";
-            event.target.favorite.value = "No";
-            event.target.num_cards.value = "0";
-            event.target.num_spells.value = "0";
-            event.target.num_creat.value = "0";
-            event.target.num_lands.value = "0";
-            event.target.num_enchant.value = "0";
-            event.target.num_art.value = "0";
     }
 
     const urlImport = endpoint + "/api/importdeck"

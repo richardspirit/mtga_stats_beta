@@ -163,6 +163,15 @@ func ImportDeck(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(error)
 }
 
+func UpdateDeck(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Context-Type", "application/x-www-urlencoded")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	var d models.Deck
+	_ = json.NewDecoder(r.Body).Decode(&d)
+	error := updateDeck(d)
+	json.NewEncoder(w).Encode(error)
+}
+
 func drank() []string {
 	// Open up our database connection.
 	db := processing.Opendb()
@@ -1194,5 +1203,32 @@ func importDeck(fileDeck string) error {
 	d.Date_Entered = time.Now()
 	d.Disable = 1
 	newDeck(d)
+	return nil
+}
+
+func updateDeck(d models.Deck) error {
+	// Open up our database connection.
+	db := processing.Opendb()
+	// defer the close till after the main function has finished
+	defer db.Close()
+	println(d.Num_Cards)
+	println(d.Name)
+	println(d.Colors)
+	// perform a db.Query insert
+	result, err := db.Exec("UPDATE decks SET colors=?, favorite=?, numcards=?, numlands=?, numspells=?, numcreatures=?, numenchant=?, numartifacts=?, disable=? WHERE name=?",
+		d.Colors, d.Favorite, d.Num_Cards, d.Num_Lands, d.Num_Spells, d.Num_Creat, d.Num_Enchant, d.Num_Art, d.Disable, d.Name)
+
+	rows, _ := result.RowsAffected()
+
+	fmt.Println(rows)
+	if err != nil {
+		log.Printf("Error %s when finding rows affected", err)
+		panic(err.Error())
+	}
+	return nil
+}
+
+func deleteDeck(d string) error {
+
 	return nil
 }
