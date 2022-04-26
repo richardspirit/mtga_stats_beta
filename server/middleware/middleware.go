@@ -172,6 +172,15 @@ func UpdateDeck(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(error)
 }
 
+func DeleteDeck(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Context-Type", "application/x-www-urlencoded")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	var d string
+	_ = json.NewDecoder(r.Body).Decode(&d)
+	error := deleteDeck(d)
+	json.NewEncoder(w).Encode(error)
+}
+
 func drank() []string {
 	// Open up our database connection.
 	db := processing.Opendb()
@@ -1229,6 +1238,74 @@ func updateDeck(d models.Deck) error {
 }
 
 func deleteDeck(d string) error {
+	// Open up our database connection.
+	db := processing.Opendb()
+	// defer the close till after the main function has finished
+	defer db.Close()
 
+	// archive deck record
+	query := "INSERT INTO decks_deleted(name, colors, date_entered, favorite, max_streak, cur_streak, numcards, numlands, numspells, numcreatures, disable) SELECT name, colors, date_entered, favorite, max_streak, cur_streak, numcards, numlands, numspells, numcreatures, disable FROM decks WHERE name=?"
+	ctx, cancelfunc := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancelfunc()
+	stmt, err := db.PrepareContext(ctx, query)
+	if err != nil {
+		log.Printf("Error %s when preparing SQL statement", err)
+		panic(err.Error())
+	}
+	defer stmt.Close()
+	res, err := stmt.ExecContext(ctx, d)
+	if err != nil {
+		log.Printf("Error %s when inserting row into deck table", err)
+		panic(err.Error())
+	}
+	rows, err := res.RowsAffected()
+	if err != nil {
+		log.Printf("Error %s when finding rows affected", err)
+		panic(err.Error())
+	}
+	log.Printf("%d deck archived ", rows)
+
+	//delete record from deck table
+	query = "DELETE FROM decks WHERE name=?"
+	ctx, cancelfunc = context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancelfunc()
+	stmt, err = db.PrepareContext(ctx, query)
+	if err != nil {
+		fmt.Printf("Error %s when preparing SQL statement", err)
+		panic(err.Error())
+	}
+	defer stmt.Close()
+	res, err = stmt.ExecContext(ctx, d)
+	if err != nil {
+		log.Printf("Error %s when deleting row from deck table", err)
+		panic(err.Error())
+	}
+	rows, err = res.RowsAffected()
+	if err != nil {
+		log.Printf("Error %s when finding rows affected", err)
+		panic(err.Error())
+	}
+	fmt.Printf("%d deck deleted\n", rows)
+	//delete cards related to deck
+	query = "DELETE FROM cards WHERE deck=?"
+	ctx, cancelfunc = context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancelfunc()
+	stmt, err = db.PrepareContext(ctx, query)
+	if err != nil {
+		fmt.Printf("Error %s when preparing SQL statement", err)
+		panic(err.Error())
+	}
+	defer stmt.Close()
+	res, err = stmt.ExecContext(ctx, d)
+	if err != nil {
+		log.Printf("Error %s when deleting row from card table", err)
+		panic(err.Error())
+	}
+	rows, err = res.RowsAffected()
+	if err != nil {
+		log.Printf("Error %s when finding rows affected", err)
+		panic(err.Error())
+	}
+	fmt.Printf("%d cards deleted\n", rows)
 	return nil
 }
