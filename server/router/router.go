@@ -29,5 +29,6 @@ func Router() *mux.Router {
 	router.HandleFunc("/api/anal/deckbycards", middleware.DecksByCardTotals).Methods("GET", "OPTIONS")
 	router.HandleFunc("/api/importset", middleware.ImportSet).Methods("POST", "OPTIONS")
 	router.HandleFunc("/api/importdeck", middleware.ImportDeck).Methods("POST", "OPTIONS")
+	router.HandleFunc("/api/updatedeck", middleware.UpdateDeck).Methods("POST", "OPTIONS")
 	return router
 }
