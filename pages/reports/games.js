@@ -66,16 +66,18 @@ export default function Games() {
     },[]);
 
     let count = 0;
-    Row.forEach(element => {
-        const rowData = element.split("|");
-        const rowObj = {};
-        rowObj.deck = rowData[0];
-        rowObj.day = rowData[1];
-        rowObj.winsloses = rowData[2];     
-        data.push(rowObj);
-        count++;
-        //console.log(rowObj)
-    });
+    if (Row) {
+        Row.forEach(element => {
+            const rowData = element.split("|");
+            const rowObj = {};
+            rowObj.deck = rowData[0];
+            rowObj.day = rowData[1];
+            rowObj.winsloses = rowData[2];     
+            data.push(rowObj);
+            count++;
+            //console.log(rowObj)
+        });
+    }
 
     const [RowLose, getRowLose] = useState([]);
     const dataLose = [];
@@ -97,15 +99,17 @@ export default function Games() {
         getLoseData()
     },[]);
     let countLose = 0;
-    RowLose.forEach(element => {
-        const rowData = element.split("|");
-        const rowObj = {};
-        rowObj.deck = rowData[0];
-        rowObj.day = rowData[1];
-        rowObj.winsloses = rowData[2];
-        dataLose.push(rowObj);
-        countLose++;
-    })
+    if (RowLose) {
+        RowLose.forEach(element => {
+            const rowData = element.split("|");
+            const rowObj = {};
+            rowObj.deck = rowData[0];
+            rowObj.day = rowData[1];
+            rowObj.winsloses = rowData[2];
+            dataLose.push(rowObj);
+            countLose++;
+        });
+    }
     
     const [Decks, getDecks] = React.useState([]);
     const urld = endpoint + "/api/deckname";
@@ -125,12 +129,14 @@ export default function Games() {
         getName()
     },[]);
 
-    Decks.forEach(deck => {
-        let rowObj = {};
-        rowObj.label = deck;
-        rowObj.value = deck;
-        deckname.push(rowObj);
-    });
+    if (Decks) {
+        Decks.forEach(deck => {
+            let rowObj = {};
+            rowObj.label = deck;
+            rowObj.value = deck;
+            deckname.push(rowObj);
+        });
+    }
 
         useEffect (() => {
             window.addEventListener('onChange', handleChange)

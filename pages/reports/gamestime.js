@@ -38,23 +38,25 @@ export default function GamesTime() {
         getData()
     },[]);
 
-    Rows.forEach(element => {
-        const rowData = element.split("|");
-        const rowObj = {};
-        rowObj.deck = rowData[0];
-        rowObj.time = rowData[1];
-        rowObj.reason = rowData[2];
-        rowObj.result = rowData[3];  
-        data.push(rowObj);
-        //console.log(data)
-    });
+    if (Rows) {
+        Rows.forEach(element => {
+            const rowData = element.split("|");
+            const rowObj = {};
+            rowObj.deck = rowData[0];
+            rowObj.time = rowData[1];
+            rowObj.reason = rowData[2];
+            rowObj.result = rowData[3];  
+            data.push(rowObj);
+            //console.log(data)
+        });
+    }
 
     return (
         <>
         <div className={styles.analysis}>
             <main className={styles.main}>
             <div>
-                <h1 className={styles.analysis_title}>Wins/Loses Reasons</h1>
+                <h1 className={styles.analysis_title}>Wins/Loses By Game Time</h1>
             </div>
             <Container style={{ marginTop: 100 }}>
                 <TableContainer columns={columns} data={data} />

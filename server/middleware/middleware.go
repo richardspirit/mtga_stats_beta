@@ -196,7 +196,7 @@ func drank() []string {
 		rkquery_all string
 	)
 
-	rkquery_all = "SELECT deck, ranking, wins, loses FROM mtga_test.rankings WHERE deleted IS NULL"
+	rkquery_all = "SELECT deck, ranking, wins, loses FROM rankings WHERE deleted IS NULL"
 
 	results, err := db.Query(rkquery_all)
 	if err != nil {
@@ -233,7 +233,7 @@ func gameCount() []string {
 		ctquery  string
 	)
 
-	ctquery = "SELECT deck, results AS Count FROM mtga_test.game_count WHERE deleted IS NULL ORDER BY results DESC"
+	ctquery = "SELECT deck, results AS Count FROM game_count WHERE deleted IS NULL ORDER BY results DESC"
 	results, err := db.Query(ctquery)
 	if err != nil {
 		panic(err.Error()) // proper error handling instead of panic in your app
@@ -257,7 +257,7 @@ func viewDecks() []string {
 	db := processing.Opendb()
 	defer db.Close()
 
-	vquery_all := "SELECT name, colors, date_entered, favorite, max_streak FROM mtga_test.decks ORDER BY name"
+	vquery_all := "SELECT name, colors, date_entered, favorite, max_streak FROM decks ORDER BY name"
 	results, err := db.Query(vquery_all)
 	if err != nil {
 		panic(err.Error()) // proper error handling instead of panic in your app
@@ -297,7 +297,7 @@ func topTen() []string {
 	db := processing.Opendb()
 	defer db.Close()
 
-	results, err := db.Query("SELECT deck, ranking, wins, loses FROM mtga_test.topten")
+	results, err := db.Query("SELECT deck, ranking, wins, loses FROM topten")
 	if err != nil {
 		panic(err.Error()) // proper error handling instead of panic in your app
 	}
@@ -342,7 +342,7 @@ func winPerc() []string {
 		pct_all  string
 	)
 
-	pct_all = "SELECT deck,win_pct,win_count,games FROM mtga_test.win_percentage WHERE deck IN (SELECT name FROM mtga_test.decks)"
+	pct_all = "SELECT deck,win_pct,win_count,games FROM win_percentage WHERE deck IN (SELECT name FROM decks)"
 
 	results, err := db.Query(pct_all)
 	if err != nil {
@@ -382,7 +382,7 @@ func favorites() []string {
 		loses        int
 	)
 
-	results, err := db.Query("SELECT name, date_entered, wins, loses FROM mtga_test.decks d JOIN record r ON d.name = r.deck WHERE favorite = 0")
+	results, err := db.Query("SELECT name, date_entered, wins, loses FROM decks d JOIN record r ON d.name = r.deck WHERE favorite = 0")
 	if err != nil {
 		panic(err.Error()) // proper error handling instead of panic in your app
 	}
@@ -407,7 +407,7 @@ func deckName() []string {
 
 	var deckname string
 
-	results, err := db.Query("SELECT name FROM mtga_test.decks")
+	results, err := db.Query("SELECT name FROM decks")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -433,7 +433,7 @@ func deckDetails() []string {
 
 	var d models.Deck
 
-	vquery = "SELECT name, colors, date_entered, favorite, max_streak, cur_streak, numcards, numlands, numspells, numcreatures, numenchant, numartifacts FROM mtga_test.decks"
+	vquery = "SELECT name, colors, date_entered, favorite, max_streak, cur_streak, numcards, numlands, numspells, numcreatures, numenchant, numartifacts FROM decks"
 	results, err := db.Query(vquery)
 	if err != nil {
 		panic(err.Error())
@@ -467,7 +467,7 @@ func newDeck(d models.Deck) error {
 	defer db.Close()
 	d.Name = strings.TrimSpace(d.Name)
 	// perform a db.Query insert
-	query := "INSERT INTO mtga_test.decks(name, colors, favorite, numcards, numlands, numspells, numcreatures, numenchant, numartifacts) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+	query := "INSERT INTO decks(name, colors, favorite, numcards, numlands, numspells, numcreatures, numenchant, numartifacts) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 	ctx, cancelfunc := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancelfunc()
 	stmt, err := db.PrepareContext(ctx, query)
@@ -501,7 +501,7 @@ func newGame(g models.Game) error {
 	defer db.Close()
 
 	// perform a db.Query insert
-	query := "INSERT INTO mtga_test.games(results, cause, deck, opponent, level, game_type) VALUES (?,?,?,?,?,?)"
+	query := "INSERT INTO games(results, cause, deck, opponent, level, game_type) VALUES (?,?,?,?,?,?)"
 	ctx, cancelfunc := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancelfunc()
 	stmt, err := db.PrepareContext(ctx, query)
@@ -547,10 +547,10 @@ func gameByDay(d string, win_lose string) []string {
 		finalresults       []string
 	)
 
-	win_day_query = "SELECT deck, MAX(win_count) as max_win, day_of_week FROM mtga_test.wins_by_day WHERE deck=? AND deck IN (SELECT name FROM mtga_test.decks) GROUP BY deck, day_of_week ORDER BY win_count DESC LIMIT 1"
-	win_day_all_query = "SELECT deck, win_count, day_of_week FROM mtga_test.most_wbd WHERE deck IN (SELECT name FROM mtga_test.decks) ORDER BY FIELD(day_of_week , 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'), win_count DESC;"
-	lose_day_query = "SELECT deck, MAX(lose_count) as max_loses, day_of_week FROM mtga_test.loses_by_day WHERE deck=? AND deck IN (SELECT name FROM mtga_test.decks) GROUP BY deck, day_of_week ORDER BY lose_count DESC LIMIT 1"
-	lose_day_all_query = "SELECT deck, lose_count, day_of_week FROM mtga_test.most_lbd WHERE deck IN (SELECT name FROM mtga_test.decks) ORDER BY FIELD(day_of_week , 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'), lose_count DESC"
+	win_day_query = "SELECT deck, MAX(win_count) as max_win, day_of_week FROM wins_by_day WHERE deck=? AND deck IN (SELECT name FROM decks) GROUP BY deck, day_of_week ORDER BY win_count DESC LIMIT 1"
+	win_day_all_query = "SELECT deck, win_count, day_of_week FROM most_wbd WHERE deck IN (SELECT name FROM decks) ORDER BY FIELD(day_of_week , 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'), win_count DESC;"
+	lose_day_query = "SELECT deck, MAX(lose_count) as max_loses, day_of_week FROM loses_by_day WHERE deck=? AND deck IN (SELECT name FROM decks) GROUP BY deck, day_of_week ORDER BY lose_count DESC LIMIT 1"
+	lose_day_all_query = "SELECT deck, lose_count, day_of_week FROM most_lbd WHERE deck IN (SELECT name FROM decks) ORDER BY FIELD(day_of_week , 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'), lose_count DESC"
 
 	if d != "n" && win_lose == "win" {
 		results := db.QueryRow(win_day_query, d)
@@ -626,7 +626,7 @@ func gameByDayWeek() []string {
 		finalresults []string
 	)
 
-	wins_loses = "SELECT w.day_of_week, w.deck, w.win_count, l.lose_count FROM mtga_test.wins_by_day w JOIN mtga_test.loses_by_day l ON w.deck = l.deck AND w.day_of_week = l.day_of_week"
+	wins_loses = "SELECT w.day_of_week, w.deck, w.win_count, l.lose_count FROM wins_by_day w JOIN loses_by_day l ON w.deck = l.deck AND w.day_of_week = l.day_of_week"
 
 	results, err := db.Query(wins_loses)
 	if err != nil {
@@ -667,7 +667,7 @@ func gamesByReason() []string {
 		gmRes        string
 	)
 
-	rsn_query = "SELECT deck, cause, results FROM mtga_test.games WHERE deck IN (SELECT name FROM mtga_test.decks) ORDER BY deck"
+	rsn_query = "SELECT deck, cause, results FROM games WHERE deck IN (SELECT name FROM decks) ORDER BY deck"
 
 	results, err := db.Query(rsn_query)
 	if err != nil {
@@ -712,7 +712,7 @@ func gamesByTime() []string {
 		finalresults []string
 	)
 
-	tm_query = "SELECT deck, cause, TIME(`Timestamp`), results AS playtime FROM mtga_test.games WHERE deck IN (SELECT name FROM mtga_test.decks) ORDER BY deck"
+	tm_query = "SELECT deck, cause, TIME(`Timestamp`), results AS playtime FROM games WHERE deck IN (SELECT name FROM decks) ORDER BY deck"
 	results, err := db.Query(tm_query)
 
 	if err != nil {
@@ -767,7 +767,7 @@ func gamesByLevel() []string {
 		finalresults []string
 	)
 
-	lvl_query = "SELECT deck, opponent, `level`, cause, results FROM mtga_test.games WHERE deck IN (SELECT name FROM mtga_test.decks) ORDER BY deck"
+	lvl_query = "SELECT deck, opponent, `level`, cause, results FROM games WHERE deck IN (SELECT name FROM decks) ORDER BY deck"
 	results, err := db.Query(lvl_query)
 
 	if err != nil {
@@ -811,7 +811,7 @@ func deleteRecommend() []string {
 		finalresults []string
 	)
 
-	results, err := db.Query("SELECT name, date_entered, win_pct, win_count, games FROM mtga_test.decks d JOIN mtga_test.win_percentage wp ON d.name = wp.deck WHERE win_pct <= .40 ORDER BY games DESC, name")
+	results, err := db.Query("SELECT name, date_entered, win_pct, win_count, games FROM decks d JOIN win_percentage wp ON d.name = wp.deck WHERE win_pct <= .40 ORDER BY games DESC, name")
 
 	if err != nil {
 		if strings.Contains(err.Error(), "no rows in result set") {
@@ -857,7 +857,7 @@ func decksByCardTotals() []string {
 		finalresults  []string
 	)
 
-	crd_query = "SELECT DISTINCT numcards, numlands, numspells, numcreatures, numenchant, numartifacts, r.wins, r.loses FROM mtga_test.decks d JOIN mtga_test.record r ON d.name = r.deck"
+	crd_query = "SELECT DISTINCT numcards, numlands, numspells, numcreatures, numenchant, numartifacts, r.wins, r.loses FROM decks d JOIN record r ON d.name = r.deck"
 
 	results, err := db.Query(crd_query)
 	if err != nil {
@@ -914,7 +914,7 @@ func importSet(fileName string) error {
 
 	json.Unmarshal(byteValue, &cards)
 
-	/* 	results := db.QueryRow("SELECT DISTINCT set_code FROM mtga_test.sets WHERE set_code=?", cards.Cards[0].SetCode)
+	/* 	results := db.QueryRow("SELECT DISTINCT set_code FROM sets WHERE set_code=?", cards.Cards[0].SetCode)
 	   	err = results.Scan(&s)
 	   	if err == nil {
 	   		println("File has already been loaded: ", dirFile)
@@ -923,7 +923,7 @@ func importSet(fileName string) error {
 
 	// we iterate through every user within our cards array
 	for i := 0; i < len(cards.Cards); i++ {
-		nresult := db.QueryRow("SELECT DISTINCT set_name FROM mtga_test.set_abbreviations WHERE set_abbrev=?", cards.Cards[i].SetCode)
+		nresult := db.QueryRow("SELECT DISTINCT set_name FROM set_abbreviations WHERE set_abbrev=?", cards.Cards[i].SetCode)
 		err = nresult.Scan(&setname)
 
 		if err != nil {
@@ -955,7 +955,7 @@ func importSet(fileName string) error {
 		}
 		//println(colors)
 		// perform a db.Query insert
-		upresult, err := db.Exec("INSERT INTO mtga_test.sets(set_name, card_name, colors, mana_cost, mana_colors, converted_mana_cost, set_number, card_text, type, sub_type, super_type, types, rarity, set_code, card_side) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+		upresult, err := db.Exec("INSERT INTO sets(set_name, card_name, colors, mana_cost, mana_colors, converted_mana_cost, set_number, card_text, type, sub_type, super_type, types, rarity, set_code, card_side) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 			setname, cards.Cards[i].Name, colors, cards.Cards[i].ManaValue, cards.Cards[i].ManaCost, cards.Cards[i].ConvertedMana, cards.Cards[i].Number, cards.Cards[i].OriginalText, cards.Cards[i].Type, subtypes, supertypes, types, cards.Cards[i].Rarity, cards.Cards[i].SetCode, cards.Cards[i].Side)
 		if err != nil {
 			println(cards.Cards[i].Name)
@@ -1051,7 +1051,7 @@ func importDeck(fileDeck string) error {
 				continue
 			}
 			// perform a db.Query insert
-			query := "INSERT INTO mtga_test.cards(deck, numcopy, cardname, `set`, setnum, side_board) VALUES (?, ?, ?, ?, ?, ?)"
+			query := "INSERT INTO cards(deck, numcopy, cardname, `set`, setnum, side_board) VALUES (?, ?, ?, ?, ?, ?)"
 			ctx, cancelfunc := context.WithTimeout(context.Background(), 5*time.Second)
 			defer cancelfunc()
 			stmt, err := db.PrepareContext(ctx, query)
@@ -1157,7 +1157,7 @@ func importDeck(fileDeck string) error {
 		}
 		if strings.Contains(colors, "Blue") {
 			if !strings.Contains(d.Colors, "Blue") {
-				if len(d.Colors) != 0 {
+				if len(d.Colors) < 1 {
 					d.Colors = "Blue"
 				} else {
 					d.Colors += ", Blue"
@@ -1175,7 +1175,7 @@ func importDeck(fileDeck string) error {
 		}
 		if strings.Contains(colors, "Red") {
 			if !strings.Contains(d.Colors, "Red") {
-				if len(d.Colors) != 0 {
+				if len(d.Colors) < 1 {
 					d.Colors = "Red"
 				} else {
 					d.Colors += ", Red"
@@ -1185,26 +1185,38 @@ func importDeck(fileDeck string) error {
 
 	}
 
-	results := db.QueryRow("SELECT SUM(numcopy) FROM mtga_test.cards WHERE side_board <> 'y' AND deck=?", d.Name)
+	results := db.QueryRow("SELECT SUM(numcopy) FROM cards WHERE side_board <> 'y' AND deck=?", d.Name)
 	err = results.Scan(&d.Num_Cards)
 	if err != nil {
 		panic(err.Error())
 	}
 
-	results = db.QueryRow("SELECT SUM(numcopy) FROM mtga_test.cards WHERE side_board <> 'y' AND cardname IN (SELECT DISTINCT SUBSTRING_INDEX(card_name,'/',1)  FROM mtga.sets WHERE types = 'Land' AND card_side IN ('a','')) AND deck=?", d.Name)
+	results = db.QueryRow("SELECT CASE WHEN ISNULL(numcopy) THEN 0 ELSE SUM(numcopy) END FROM cards WHERE side_board <> 'y' AND cardname IN (SELECT DISTINCT SUBSTRING_INDEX(card_name,'/',1)  FROM sets WHERE types = 'Land' AND card_side IN ('a','')) AND deck=?", d.Name)
 	err = results.Scan(&d.Num_Lands)
 	if err != nil {
 		panic(err.Error())
 	}
 
-	results = db.QueryRow("SELECT SUM(numcopy) FROM mtga_test.cards WHERE side_board <> 'y' AND cardname IN (SELECT DISTINCT SUBSTRING_INDEX(card_name,'/',1) FROM mtga.sets WHERE types = 'Creature' AND card_side IN ('a','')) AND deck=?", d.Name)
+	results = db.QueryRow("SELECT CASE WHEN ISNULL(numcopy) THEN 0 ELSE SUM(numcopy) END FROM cards WHERE side_board <> 'y' AND cardname IN (SELECT DISTINCT SUBSTRING_INDEX(card_name,'/',1) FROM sets WHERE types = 'Creature' AND card_side IN ('a','')) AND deck=?", d.Name)
 	err = results.Scan(&d.Num_Creat)
 	if err != nil {
 		panic(err.Error())
 	}
 
-	results = db.QueryRow("SELECT SUM(numcopy) FROM mtga_test.cards WHERE side_board <> 'y' AND cardname IN (SELECT DISTINCT SUBSTRING_INDEX(card_name,'/',1)  FROM mtga.`sets` WHERE types NOT IN ('Creature','Land') AND card_side IN ('a','')) AND deck=?", d.Name)
+	results = db.QueryRow("SELECT CASE WHEN ISNULL(numcopy) THEN 0 ELSE SUM(numcopy) END FROM cards WHERE side_board <> 'y' AND cardname IN (SELECT DISTINCT SUBSTRING_INDEX(card_name,'/',1)  FROM `sets` WHERE types IN ('Instant','Sorcery') AND card_side IN ('a','')) AND deck=?", d.Name)
 	err = results.Scan(&d.Num_Spells)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	results = db.QueryRow("SELECT CASE WHEN ISNULL(numcopy) THEN 0 ELSE SUM(numcopy) END FROM cards WHERE side_board <> 'y' AND cardname IN (SELECT DISTINCT SUBSTRING_INDEX(card_name,'/',1)  FROM `sets` WHERE types IN ('Enchantment') AND card_side IN ('a','')) AND deck=?", d.Name)
+	err = results.Scan(&d.Num_Enchant)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	results = db.QueryRow("SELECT CASE WHEN ISNULL(numcopy) THEN 0 ELSE SUM(numcopy) END FROM cards WHERE side_board <> 'y' AND cardname IN (SELECT DISTINCT SUBSTRING_INDEX(card_name,'/',1)  FROM `sets` WHERE types IN ('Artifact') AND card_side IN ('a','')) AND deck=?", d.Name)
+	err = results.Scan(&d.Num_Art)
 	if err != nil {
 		panic(err.Error())
 	}

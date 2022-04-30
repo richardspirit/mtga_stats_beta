@@ -41,17 +41,19 @@ export default function DeleteDecks() {
         getData()
     },[]);
 
-    Rows.forEach(element => {
-        const rowData = element.split("|");
-        const rowObj = {};
-        rowObj.deck = rowData[0];
-        rowObj.dateentered = rowData[1];
-        rowObj.winpct = rowData[2];
-        rowObj.winct = rowData[3];
-        rowObj.gamect = rowData[4];
-        data.push(rowObj);
-        //console.log(data)
-    });
+    if (Rows) {
+        Rows.forEach(element => {
+            const rowData = element.split("|");
+            const rowObj = {};
+            rowObj.deck = rowData[0];
+            rowObj.dateentered = rowData[1];
+            rowObj.winpct = rowData[2];
+            rowObj.winct = rowData[3];
+            rowObj.gamect = rowData[4];
+            data.push(rowObj);
+            //console.log(data)
+        });
+    }
 
     return (
         <>

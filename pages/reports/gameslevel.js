@@ -41,17 +41,19 @@ export default function GamesLevel() {
         getData()
     },[]);
 
-    Rows.forEach(element => {
-        const rowData = element.split("|");
-        const rowObj = {};
-        rowObj.deck = rowData[0];
-        rowObj.opponent = rowData[1];
-        rowObj.level = rowData[2];
-        rowObj.reason = rowData[3];
-        rowObj.result = rowData[4];
-        data.push(rowObj);
-        //console.log(data)
-    });
+    if (Rows) {
+        Rows.forEach(element => {
+            const rowData = element.split("|");
+            const rowObj = {};
+            rowObj.deck = rowData[0];
+            rowObj.opponent = rowData[1];
+            rowObj.level = rowData[2];
+            rowObj.reason = rowData[3];
+            rowObj.result = rowData[4];
+            data.push(rowObj);
+            //console.log(data)
+        });
+    }
 
     return (
         <>

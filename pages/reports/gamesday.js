@@ -2,7 +2,7 @@ import Link from "next/link";
 import styles from '../../styles/Home.module.css';
 import React, {useState, useEffect, useMemo} from 'react';
 import TableContainer from "../api/sort-table";
-import { Container } from "reactstrap";
+import { Container, Row } from "reactstrap";
 import { Helmet } from 'react-helmet';
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -38,16 +38,18 @@ export default function GamesDay() {
         getData();
     },[]);
 
-    Rows.forEach(element => {
-        const rowData = element.split("|");
-        const rowObj = {};
-        rowObj.day = rowData[0];
-        rowObj.deck = rowData[1];
-        rowObj.wins = rowData[2];
-        rowObj.loses = rowData[3];    
-        data.push(rowObj);
-        //console.log(data)
-    });
+    if (Rows) {
+        Rows.forEach(element => {
+            const rowData = element.split("|");
+            const rowObj = {};
+            rowObj.day = rowData[0];
+            rowObj.deck = rowData[1];
+            rowObj.wins = rowData[2];
+            rowObj.loses = rowData[3];    
+            data.push(rowObj);
+            //console.log(data)
+        });
+    }
 
     return (
         <>

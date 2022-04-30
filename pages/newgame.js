@@ -80,12 +80,15 @@ export default function NewGame() {
         getName()
     },[]);
 
-    Decks.forEach(deck => {
-        let rowObj = {};
-        rowObj.label = deck;
-        rowObj.value = deck;
-        deckname.push(rowObj);
-    });
+    if (Decks) {
+        Decks.forEach(deck => {
+            let rowObj = {};
+            rowObj.label = deck;
+            rowObj.value = deck;
+            deckname.push(rowObj);
+        });
+    }
+
     
     const handleChange = (obj) => {
         if (obj.value === "Win" || obj.value === "Lose"){

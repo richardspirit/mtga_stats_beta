@@ -63,19 +63,21 @@ export default function ViewDecks() {
         getData()
     },[]);
 
-    Rows.forEach(element => {
-        const rowData = element.split("|");
-        let i = 0;
-        let rowObj = {};
-        rowObj.count = rowData[0];
-        rowObj.deck = rowData[1];
-        rowObj.color = rowData[2];
-        rowObj.date_entered = rowData[3];
-        rowObj.favorite = rowData[4];
-        rowObj.maxstreak = rowData[5];
-        data.push(rowObj);
-        console.log(data);
-    });
+    if (Rows) {
+        Rows.forEach(element => {
+            const rowData = element.split("|");
+            let i = 0;
+            let rowObj = {};
+            rowObj.count = rowData[0];
+            rowObj.deck = rowData[1];
+            rowObj.color = rowData[2];
+            rowObj.date_entered = rowData[3];
+            rowObj.favorite = rowData[4];
+            rowObj.maxstreak = rowData[5];
+            data.push(rowObj);
+            console.log(data);
+        });
+    }
 
     return (
         <>

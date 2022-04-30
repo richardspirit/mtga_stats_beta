@@ -36,15 +36,17 @@ export default function GameCount() {
         getData()
     },[]);
 
-    Rows.forEach(element => {
-        const rowData = element.split("|");
-        let i = 0;
-        let rowObj = {};
-        rowObj.deck = rowData[0];
-        rowObj.gamecount = rowData[1];
-        data.push(rowObj);
-        console.log(data);
-    });
+    if (Rows) {
+        Rows.forEach(element => {
+            const rowData = element.split("|");
+            let i = 0;
+            let rowObj = {};
+            rowObj.deck = rowData[0];
+            rowObj.gamecount = rowData[1];
+            data.push(rowObj);
+            console.log(data);
+        });
+    }
 
     return (
         <>

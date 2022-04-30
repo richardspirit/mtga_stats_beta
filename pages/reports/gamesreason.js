@@ -34,15 +34,17 @@ export default function GamesReason() {
         getData()
     },[]);
 
-    Rows.forEach(element => {
-        const rowData = element.split("|");
-        const rowObj = {};
-        rowObj.deck = rowData[0];
-        rowObj.reason = rowData[1];
-        rowObj.results = rowData[2];  
-        data.push(rowObj);
-        //console.log(data)
-    });
+    if (Rows) {
+        Rows.forEach(element => {
+            const rowData = element.split("|");
+            const rowObj = {};
+            rowObj.deck = rowData[0];
+            rowObj.reason = rowData[1];
+            rowObj.results = rowData[2];  
+            data.push(rowObj);
+            //console.log(data)
+        });
+    }
 
     return (
         <>
