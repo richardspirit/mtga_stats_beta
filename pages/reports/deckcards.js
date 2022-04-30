@@ -50,20 +50,22 @@ export default function DeckByCards() {
         getData()
     },[]);
 
-    Rows.forEach(element => {
-        const rowData = element.split("|");
-        const rowObj = {};
-        rowObj.cardtotal = rowData[0];
-        rowObj.landtotal = rowData[1];
-        rowObj.spelltotal = rowData[2];
-        rowObj.creaturetotal = rowData[3];
-        rowObj.enchanttotal = rowData[4];
-        rowObj.artifacttotal = rowData[5];
-        rowObj.wins = rowData[6];
-        rowObj.loses = rowData[7];
-        data.push(rowObj);
-        //console.log(data)
-    });
+    if (Rows) {
+        Rows.forEach(element => {
+            const rowData = element.split("|");
+            const rowObj = {};
+            rowObj.cardtotal = rowData[0];
+            rowObj.landtotal = rowData[1];
+            rowObj.spelltotal = rowData[2];
+            rowObj.creaturetotal = rowData[3];
+            rowObj.enchanttotal = rowData[4];
+            rowObj.artifacttotal = rowData[5];
+            rowObj.wins = rowData[6];
+            rowObj.loses = rowData[7];
+            data.push(rowObj);
+            //console.log(data)
+        });
+    }
 
     return (
         <>

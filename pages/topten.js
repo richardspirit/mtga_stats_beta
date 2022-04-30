@@ -60,18 +60,20 @@ export default function TopTen() {
         getData()
     },[]);
 
-    Rows.forEach(element => {
-        const rowData = element.split("|");
-        let i = 0;
-        let rowObj = {};
-        rowObj.num = rowData[0];
-        rowObj.deck = rowData[1];
-        rowObj.rank = rowData[2];
-        rowObj.wins = rowData[3];
-        rowObj.loses = rowData[4];
-        data.push(rowObj);
-        console.log(data);
-    });
+    if (Rows) {
+        Rows.forEach(element => {
+            const rowData = element.split("|");
+            let i = 0;
+            let rowObj = {};
+            rowObj.num = rowData[0];
+            rowObj.deck = rowData[1];
+            rowObj.rank = rowData[2];
+            rowObj.wins = rowData[3];
+            rowObj.loses = rowData[4];
+            data.push(rowObj);
+            console.log(data);
+        });
+    }
 
     return (
         <>

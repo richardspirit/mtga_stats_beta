@@ -53,17 +53,19 @@ export default function DeckRank() {
         getData()
     },[]);
 
-    Rows.forEach(element => {
-        const rowData = element.split("|");
-        let i = 0;
-        let rowObj = {};
-        rowObj.rank = rowData[0];
-        rowObj.deck = rowData[1];
-        rowObj.wins = rowData[2];
-        rowObj.loses = rowData[3];
-        data.push(rowObj);
-        console.log(data);
-    });
+    if (Rows) {
+        Rows.forEach(element => {
+            const rowData = element.split("|");
+            let i = 0;
+            let rowObj = {};
+            rowObj.rank = rowData[0];
+            rowObj.deck = rowData[1];
+            rowObj.wins = rowData[2];
+            rowObj.loses = rowData[3];
+            data.push(rowObj);
+            console.log(data);
+        });
+    }
 
     return (
         <>

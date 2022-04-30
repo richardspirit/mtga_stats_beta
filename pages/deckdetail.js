@@ -1,116 +1,15 @@
 import Link from "next/link";
 import styles from '../styles/Home.module.css';
 import React, {useState, useEffect} from 'react';
-import RankQuery from "./api/resultquery";
 import Select from 'react-select';
-// import Layout from "../components/layout";
+
 const endpoint = "http://localhost:8080";
 
-
 export default function DeckDetail() {
-/*     const columns = React.useMemo(
-        () => [
-            {
-                Header: () => (<div style={{textAlign: "left"}}>Deck</div>),
-                accessor: "deck",
-                minWidth: 150,
-                width: 200,
-                maxWidth: 250
-            },
-            {
-                Header: () => (<div style={{textAlign: "left"}}>Total Cards</div>),
-                accessor: "totalcards",
-                minWidth: 150,
-                width: 200,
-                maxWidth: 250
-            },
-            {
-                Header: () => (<div style={{textAlign: "left"}}>Total Creatures</div>),
-                accessor: "totalcreat",
-                minWidth: 150,
-                width: 200,
-                maxWidth: 250
-            },
-            {
-                Header: () => (<div style={{textAlign: "left"}}>Max Streak</div>),
-                accessor: "maxstreak",
-                minWidth: 150,
-                width: 200,
-                maxWidth: 250
-            },
-            {
-                Header: () => (<div style={{textAlign: "left"}}>Color/s</div>),
-                accessor: "color",
-                minWidth: 150,
-                width: 200,
-                maxWidth: 250
-            }
-        ],[]
-    );
-
-    const columns2 = React.useMemo(
-        () => [
-            {
-                Header: () => (<div style={{textAlign: "left"}}>Total Lands</div>),
-                accessor: "total_lands",
-                minWidth: 150,
-                width: 200,
-                maxWidth: 250
-            },
-            {
-                Header: () => (<div style={{textAlign: "left"}}>Total Enchantments</div>),
-                accessor: "totalenchant",
-                minWidth: 150,
-                width: 200,
-                maxWidth: 250
-            },
-            {
-                Header: () => (<div style={{textAlign: "left"}}>Current Streak</div>),
-                accessor: "curstreak",
-                minWidth: 5,
-                width: 200,
-                maxWidth: 250
-            },
-            {
-                Header: () => (<div style={{textAlign: "left"}}>Date Entered</div>),
-                accessor: "date_entered",
-                minWidth: 5,
-                width: 200,
-                maxWidth: 250
-            },
-            {
-                Header: () => (<div style={{textAlign: "left"}}>Total Instants/Sorcery</div>),
-                accessor: "totalspells",
-                minWidth: 5,
-                width: 200,
-                maxWidth: 250
-            }
-        ],[]
-    );
-
-    const columns3 = React.useMemo(
-        () => [
-            {
-                Header: () => (<div style={{textAlign: "left"}}>Total Artifacts</div>),
-                accessor: "totalartifact",
-                minWidth: 5,
-                width: 150,
-                maxWidth: 25
-            },
-            {
-                Header: () => (<div style={{textAlign: "left"}}>Favorite</div>),
-                accessor: "favorite",
-                minWidth: 5,
-                width: 20,
-                maxWidth: 25
-            }
-        ],[]
-    ); */
-
     const [Row, getRow] = useState([]);
     let url = endpoint + `/api/deckdetails`;
     const data = [];
-    let deckData;
+    let deckData = [];
     const [DeckData, setDeckData] = useState(deckData);
 
     const getData = () => {
@@ -125,25 +24,27 @@ export default function DeckDetail() {
     },[]);
 
     let count = 0;
-    Row.forEach(element => {
-        const rowData = element.split("|");
-        const rowObj = {};
-        rowObj.deck = rowData[0];
-        rowObj.totalcards = rowData[1];
-        rowObj.totalcreat = rowData[2];
-        rowObj.maxstreak = rowData[3];
-        rowObj.color = rowData[4];
-        rowObj.total_lands = rowData[5];
-        rowObj.totalenchant = rowData[6];
-        rowObj.curstreak = rowData[7];
-        rowObj.date_entered = rowData[8];
-        rowObj.totalspells = rowData[9];
-        rowObj.totalartifact = rowData[10];
-        rowObj.favorite = rowData[11];        
-        data.push(rowObj);
-        count++;
-
-    });
+    if (Row) {
+        Row.forEach(element => {
+            const rowData = element.split("|");
+            const rowObj = {};
+            rowObj.deck = rowData[0];
+            rowObj.totalcards = rowData[1];
+            rowObj.totalcreat = rowData[2];
+            rowObj.maxstreak = rowData[3];
+            rowObj.color = rowData[4];
+            rowObj.total_lands = rowData[5];
+            rowObj.totalenchant = rowData[6];
+            rowObj.curstreak = rowData[7];
+            rowObj.date_entered = rowData[8];
+            rowObj.totalspells = rowData[9];
+            rowObj.totalartifact = rowData[10];
+            rowObj.favorite = rowData[11];        
+            data.push(rowObj);
+            count++;
+    
+        });
+    }
     
     const [Decks, getDecks] = React.useState([]);
     const urld = endpoint + "/api/deckname";
@@ -159,12 +60,14 @@ export default function DeckDetail() {
         getName()
     },[]);
 
-    Decks.forEach(deck => {
-        let rowObj = {};
-        rowObj.label = deck;
-        rowObj.value = deck;
-        deckname.push(rowObj);
-    });
+    if (Decks) {
+        Decks.forEach(deck => {
+            let rowObj = {};
+            rowObj.label = deck;
+            rowObj.value = deck;
+            deckname.push(rowObj);
+        });
+    }
 
     const [Name, setName] = useState('');
     const [Colors, setColors] = useState('');
@@ -178,51 +81,53 @@ export default function DeckDetail() {
     const [Streak, setStreak] = useState('');
     const [MaxStreak, setMaxStreak] = useState('');
     const [DateCreated, setDateCreated] = useState('');
-    const [selectedOption, setSelectedOption] = useState(null);
-     const handleChange = (obj) => {
+    const [selectedOption, setSelectedOption] = useState('None');
+    //console.log("testing")
+    const handleChange = (obj) => {
         setSelectedOption(obj);
-        deckData = data.find(element => element.deck === obj.label)
+        deckData = data.find(element => element.deck === obj.label);
         setDeckData(deckData);
-        Object.entries(deckData).map(([key, value])=>{
-            switch(key) {
-                case 'deck':
-                    setName(value);
-                    break;
-                case 'color':
-                    setColors(value);
-                    break;
-                case 'favorite':
-                    setFavorite(value);
-                    break;
-                case 'totalcards':
-                    setCards(value);
-                    break;
-                case 'totalspells':
-                    setSpells(value);
-                    break;
-                case 'totalcreat':
-                    setCreatures(value);
-                    break;
-                case 'total_lands':
-                    setLands(value);
-                    break;
-                case 'totalenchant':
-                    setEnchantments(value);
-                    break;
-                case 'totalartifact':
-                    setArtifacts(value);
-                    break;
-                case 'curstreak':
-                    setStreak(value);
-                    break;
-                case 'maxstreak':
-                    setMaxStreak(value);
-                    break;
-                case 'date_entered':
-                    setDateCreated(value);
-            }
-        })
+            Object.entries(deckData).map(([key, value])=>{
+                    switch(key) {
+                        case 'deck':
+                            setName(value);
+                            break;
+                        case 'color':
+                            setColors(value);
+                            break;
+                        case 'favorite':
+                            setFavorite(value);
+                            break;
+                        case 'totalcards':
+                            setCards(value);
+                            break;
+                        case 'totalspells':
+                            setSpells(value);
+                            break;
+                        case 'totalcreat':
+                            setCreatures(value);
+                            break;
+                        case 'total_lands':
+                            setLands(value);
+                            break;
+                        case 'totalenchant':
+                            setEnchantments(value);
+                            break;
+                        case 'totalartifact':
+                            setArtifacts(value);
+                            break;
+                        case 'curstreak':
+                            setStreak(value);
+                            break;
+                        case 'maxstreak':
+                            setMaxStreak(value);
+                            break;
+                        case 'date_entered':
+                            setDateCreated(value);
+                    }
+            })
      }
+     //console.log("testing2")
      const url_update = endpoint + "/api/updatedeck"
      const updateDeck = async event => {
         //event.preventDefault();
@@ -257,7 +162,7 @@ export default function DeckDetail() {
                 //console.log(err)
             })
     }
-
+    //console.log("testing3")
     const url_delete = endpoint + "/api/deletedeck"
     const deleteDeck = async event => {
         const res = await fetch(url_delete, {
@@ -282,7 +187,7 @@ export default function DeckDetail() {
                     options={deckname} />
             </div>
             <br />
-            <form onSubmit={updateDeck} style={{minWidth: '1000px', minHeight: '220px', backgroundColor: 'grey', opacity: '85%'}}>
+            <form onSubmit={updateDeck} style={{minWidth: '1000px', minHeight: '220px', backgroundColor: 'grey', opacity: '85%'}}>            
                 <div className={styles.newdeck}>
                     <label htmlFor="name">
                         <span> Deck Name </span>

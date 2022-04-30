@@ -53,17 +53,19 @@ export default function WinPercent() {
         getData()
     },[]);
 
-    Rows.forEach(element => {
-        const rowData = element.split("|");
-        let i = 0;
-        let rowObj = {};
-        rowObj.deck = rowData[0];
-        rowObj.winpercent = rowData[1];
-        rowObj.numwins = rowData[2];
-        rowObj.numgame = rowData[3];
-        data.push(rowObj);
-        console.log(data);
-    });
+    if (Rows) {
+        Rows.forEach(element => {
+            const rowData = element.split("|");
+            let i = 0;
+            let rowObj = {};
+            rowObj.deck = rowData[0];
+            rowObj.winpercent = rowData[1];
+            rowObj.numwins = rowData[2];
+            rowObj.numgame = rowData[3];
+            data.push(rowObj);
+            console.log(data);
+        });
+    }
 
     return (
         <>
